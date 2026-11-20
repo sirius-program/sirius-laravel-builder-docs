@@ -1,10 +1,12 @@
 # Sirius Laravel Builder — Phased Implementation Plan
 
-Status: design agreed; implementation not started.
+Status: Phase 0 completed; Phases 1–14 not started.
 
 Decision date: November 20, 2026.
 
-This plan records the requirements and recommendations accepted during the design interview. Every implementation checkbox is intentionally unchecked. Saving this document does not authorize starting implementation, installing dependencies or skills, or modifying application code. Begin implementation only when the project owner instructs it.
+Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
+
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phase 0, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of Phase 0 does not authorize them automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -13,12 +15,12 @@ Build a Laravel package that provides `php artisan make:crud`. It discovers exis
 | Project | Responsibility |
 | --- | --- |
 | `D:\Projects\sirius-laravel-builder` | Composer package, generators, publishable stubs, package tests, generated-application fixtures |
-| `D:\Projects\sirius-laravel-builder-docs` | English implementation plan, English documentation, Sirius UI documentation interface, authenticated working demonstrations |
+| `D:\Projects\sirius-laravel-builder-docs` | English implementation plan, public package-introduction homepage, English documentation, Sirius UI theme, anonymous isolated working demonstrations |
 | `D:\Projects\sirius-ui` | Read-only local reference for the upstream UI dependency; changes are outside this plan |
 
 Upstream UI: <https://github.com/sirius-program/sirius-ui>.
 
-The package directory was empty when inspected. The docs project is an existing Laravel/Livewire application with authentication, Flux-based screens, and Pest tests. Preserve existing behavior while migrating its presentation to Sirius UI.
+The package directory was empty when inspected. The docs project began as a Laravel/Livewire application with authentication, Flux-based screens, and Pest tests. Redesign it as a public documentation website: replace the starter homepage with a package introduction, migrate its presentation to Sirius UI, and remove authentication/account features and their navigation. Preserve unrelated documentation behavior and adapt tests to the revised public-site requirements.
 
 ### Compatibility
 
@@ -225,15 +227,15 @@ Each phase depends on the preceding phases unless stated otherwise. The document
 
 This is the pre-feature gate requested by the owner. Bootstrap only what is necessary to run the architecture checks; complete it before Phase 1 feature work.
 
-- [ ] Record dependency versions and establish the package Composer skeleton, PSR-4 namespace, service-provider entry, Testbench, and Pest harness.
-- [ ] Resolve test-tool compatibility for PHP 8.3 and both supported Laravel majors; keep the docs app's existing working toolchain separate.
-- [ ] Define `composer test` for the package to run the required architecture, unit/feature, formatting, and static-analysis checks.
-- [ ] Add representative application fixtures and minimal generated-class samples so architecture assertions are non-vacuous.
-- [ ] Implement the architecture rules in Section 3, including action boundaries and prohibited direct component writes.
-- [ ] Add a test-isolation baseline: disposable app roots and databases, deterministic fixtures, and no access to production data.
-- [ ] Document the architectural decisions and add durable phase rules to both projects' AI instructions.
-- [ ] Add/update architecture documentation and both READMEs; keep the package README limited to its docs pointer.
-- [ ] Run `composer test` in both changed projects and record results.
+- [x] Record dependency versions and establish the package Composer skeleton, PSR-4 namespace, service-provider entry, Testbench, and Pest harness.
+- [x] Resolve test-tool compatibility for PHP 8.3 and both supported Laravel majors; keep the docs app's existing working toolchain separate.
+- [x] Define `composer test` for the package to run the required architecture, unit/feature, formatting, and static-analysis checks.
+- [x] Add representative application fixtures and minimal generated-class samples so architecture assertions are non-vacuous.
+- [x] Implement the architecture baseline in Section 3, including action boundaries and prohibited direct component writes; extend it to actual generated output and the Sirius Table base when those exist.
+- [x] Add a test-isolation baseline: disposable app roots and databases, deterministic fixtures, and no access to production data.
+- [x] Document the architectural decisions and add durable phase rules to both projects' AI instructions.
+- [x] Add/update architecture documentation and both READMEs; keep the package README limited to its docs pointer.
+- [x] Run `composer test` in both changed projects and record results.
 
 Acceptance: architecture tests execute against real representative classes, fail on deliberate boundary violations during verification, and pass after the valid structure is restored.
 
@@ -253,11 +255,21 @@ Acceptance: architecture tests execute against real representative classes, fail
 - [ ] Select one skill-installation owner per project. Use Boost or the standalone installer, not both for the same directory.
 - [ ] For the package root, use the supported installer service through its bootstrapped PHP/Testbench context if needed; do not assume an application `artisan` file exists.
 - [ ] Verify the installed skill includes its referenced files and document refresh behavior on upgrades.
-- [ ] Establish the docs Sirius layout/assets and light/dark theme tokens without duplicating Livewire/Alpine initialization.
-- [ ] Add a browser smoke test for the docs shell and confirm existing authentication still works.
+- [ ] Establish Sirius asset loading without duplicating Livewire/Alpine initialization.
+
+#### 1.3 Public documentation redesign
+
+- [ ] Replace the starter palette and theme with Sirius UI's light/dark tokens, typography, surfaces, borders, and semantic component colors; verify buttons, inputs, navigation, and code examples rather than changing only the primary color.
+- [ ] Remove documentation-app authentication: login, registration, logout, password reset, email verification, two-factor authentication, and account/profile/password settings screens and routes, where present.
+- [ ] Remove login/register/account links and authentication middleware or redirects from public documentation routes. Keep theme preferences available without an account.
+- [ ] Audit authentication-specific providers, configuration, frontend code, and dependencies such as Fortify; remove unused integration after confirming it is no longer referenced. Do not change the generated application's authentication/policy defaults.
+- [ ] Build a public homepage at `/` introducing Sirius Laravel Builder: package purpose, supported stack, action-based CRUD output, the `php artisan make:crud` workflow, page/dialog layout options, and links to Getting Started, documentation, and the source repository.
+- [ ] Clearly distinguish available functionality from planned features while development is incomplete; do not present the homepage as a completed release before the generator exists.
+- [ ] Add feature tests for public homepage/docs access and removal of obsolete auth/account routes; update existing authentication tests to reflect the new requirements.
+- [ ] Add browser checks for homepage navigation, responsive presentation, Sirius light/dark themes, and the absence of login/account controls or login redirects.
 - [ ] Add/update setup documentation and READMEs; run both projects' `composer test`, relevant browser checks, and the docs asset build.
 
-Acceptance: a consuming fixture discovers the command, both projects have usable Sirius skills, and the docs shell renders with Sirius styling.
+Acceptance: a consuming fixture discovers the command, both projects have usable Sirius skills, and the docs site has a public package-introduction homepage with Sirius styling. Documentation-app authentication and account screens/routes are removed, and homepage/docs access does not require login.
 
 ### Phase 2 — Resource definitions and recursive discovery
 
@@ -426,16 +438,17 @@ Acceptance: generated suites execute successfully for supported reference fixtur
 
 ### Phase 13 — Documentation and working demonstrations
 
-Documentation already grows in every phase; this phase completes navigation, examples, and end-to-end demonstrations.
+Documentation already grows in every phase. Phase 1 delivers the public homepage, Sirius theme, and authentication removal; this phase completes navigation, examples, and end-to-end demonstrations without reintroducing authentication.
 
 - [ ] Complete English guides for installation, compatibility, quick start, architecture, discovery, databases, fields, validation, operations, layouts, routes, policies, stubs, configuration files, testing, and troubleshooting.
 - [ ] Use Sirius UI throughout documentation navigation/forms/demonstrations and align light/dark semantic tokens with the upstream palette.
-- [ ] Preserve existing login/settings behavior while removing obsolete Flux dependencies only after their usages are migrated and tested.
-- [ ] Keep documentation public and require authentication for demonstration writes.
+- [ ] Refresh the homepage introduction, supported-feature descriptions, quick-start links, and page/dialog previews to reflect the implemented package rather than planned capabilities.
+- [ ] Remove obsolete Flux dependencies only after remaining usages are migrated and tested; keep the documentation site free of authentication/account features.
+- [ ] Keep documentation and demonstrations accessible without login. Scope writable demo data to each anonymous session with synthetic fixtures, CSRF protection, and server-side validation; do not expose shared application data for unrestricted writes.
 - [ ] Provide working page-mode and dialog-mode examples with synthetic data, scoped demo policies, enum fields, a same-origin select endpoint, and soft-delete examples.
 - [ ] Isolate demonstration state from real application data and make resetting demo fixtures explicit and limited to the demo environment.
-- [ ] Show policy customization in the demo explicitly; do not change the generator's deny-by-default policy scaffold to make examples work.
-- [ ] Test public documentation access, protected demo actions, navigation, responsive layouts, dark mode, and both full CRUD journeys in a browser.
+- [ ] Show demo-specific guest/session authorization explicitly; reject cross-session access and keep the generator's authenticated routes and deny-by-default policy scaffold unchanged.
+- [ ] Test anonymous homepage/documentation/demo access, session-isolated mutations, removal of auth/account routes, navigation, responsive layouts, dark mode, and both full CRUD journeys in a browser.
 - [ ] Finalize the docs README and minimal package README docs link without inventing an unconfigured deployment URL.
 - [ ] Run both projects' `composer test`, docs/browser acceptance tests, and the docs production asset build.
 
@@ -467,7 +480,7 @@ Acceptance: release artifacts install cleanly, the documented matrix is backed b
 | Real-database integration | Actual schema and persistence behavior | Driver metadata, keys, constraints, enums, custom connections |
 | Generated-app feature | Actual generated code | Routes, policies, validation, writes, soft deletes, passwords |
 | Browser | Livewire/Sirius behavior | Both layouts, canonical values, dialog lifecycle, focus, errors |
-| Documentation app | Docs/demo application behavior | Public docs, authenticated demo writes, navigation, themes |
+| Documentation app | Docs/demo application behavior | Public package homepage/docs, no auth/account routes, anonymous session-isolated demo writes, navigation, Sirius themes |
 
 Use behavior-focused feature tests for framework interactions and unit tests for framework-independent logic. Follow existing project test conventions. Use factories where appropriate, create only necessary records, prevent unintended network calls, and keep time/randomness deterministic where they affect assertions. Do not mock the query builder to claim real database behavior.
 
@@ -483,16 +496,25 @@ No universal coverage percentage replaces the acceptance criteria. Each inferred
 - [ ] Architecture, package, generated-app, browser, and real-database checks pass for the documented support matrix.
 - [ ] Each completed phase has new/updated docs, appropriate README updates, and recorded `composer test` results for all changed projects.
 - [ ] Both projects contain the complete Sirius UI AI skill and durable execution rules.
-- [ ] The docs palette matches Sirius UI, both demo layouts work, and existing authentication remains functional.
+- [ ] The docs palette and light/dark theme match Sirius UI, the public homepage introduces the package, authentication/account features are removed, and both demo layouts work without login using isolated session data.
 - [ ] Known limitations and required application-specific customizations are explicit; no unchecked required item is reported complete.
 
 ## 8. Execution evidence log
 
-Implementation has not started. Append one entry per completed phase using this structure:
+Phase 0 is complete. Append one entry per completed phase using this structure:
 
 | Phase | Date | Changed projects | Documentation/README updates | Commands and results | Remaining limitations |
 | --- | --- | --- | --- | --- | --- |
-| Not started | — | — | — | — | Awaiting instruction to begin implementation |
+| Phase 0 | November 20, 2026 | Package and docs | `ARCHITECTURE.md`, both READMEs, both `AGENTS.md` files, this plan | Package `composer test`: 33 tests / 60 assertions on PHP 8.3 with Laravel 12.73.0 / Testbench 10.12.0 and Laravel 13.43.0 / Testbench 11.3.0; Pint and PHPStan pass. Docs `composer test`: 23 tests / 58 assertions, Pint and PHPStan pass. | Handwritten fixtures only; generator, Sirius integration, browser tests, real database adapters, and the complete release matrix belong to later phases. |
+
+### Phase 0 verification details
+
+- Package dependency resolution uses PHP 8.3 with Pest 3.8.7 / PHPUnit 11.5.56 and Livewire 4.4.8. The docs dependency set was not changed.
+- Verified the architecture gate rejects a deliberate direct `Category::query()->delete()` inside the fixture Livewire component. Restored the original fixture and reran the complete passing gate.
+- Tests use a disposable application base path and SQLite in-memory connection. The fixture action proves authorization and validation failures write no records and successful calls persist only permitted data.
+- The source checker and compiled-Blade checks have documented limits; they supplement behavioral tests and do not prove all possible dynamic PHP side effects. Actual generator no-write checks must be added once the command exists.
+- Local package dependencies were returned to Laravel 13 after checking Laravel 12. Minimum-patch dependency and full database/browser matrices are not claimed by this phase.
+- PHP 8.5 can emit three upstream `ReflectionProperty::setAccessible()` deprecations from the Pest 3 architecture test stack. The PHP 8.3 baseline passes without those notices; no vendor code or deprecation reporting was altered.
 
 Planning-only verification belongs in a separate note below; it does not complete Phase 0 or any feature phase.
 

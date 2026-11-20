@@ -4,13 +4,13 @@ use App\Livewire\Settings\Profile;
 use App\Models\User;
 use Livewire\Livewire;
 
-test('profile page is displayed', function () {
+test('profile page is displayed', function (): void {
     $this->actingAs($user = User::factory()->create());
 
     $this->get('/settings/profile')->assertOk();
 });
 
-test('profile information can be updated', function () {
+test('profile information can be updated', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -29,7 +29,7 @@ test('profile information can be updated', function () {
     expect($user->email_verified_at)->toBeNull();
 });
 
-test('email is stored in lowercase so the user can still log in', function () {
+test('email is stored in lowercase so the user can still log in', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -45,14 +45,14 @@ test('email is stored in lowercase so the user can still log in', function () {
     $this->post(route('logout'));
 
     $this->post(route('login.store'), [
-        'email' => 'Test@Example.com',
+        'email'    => 'Test@Example.com',
         'password' => 'password',
     ]);
 
     $this->assertAuthenticatedAs($user);
 });
 
-test('email must be unique regardless of case', function () {
+test('email must be unique regardless of case', function (): void {
     User::factory()->create(['email' => 'taken@example.com']);
 
     $this->actingAs(User::factory()->create());
@@ -64,7 +64,7 @@ test('email must be unique regardless of case', function () {
         ->assertHasErrors(['email']);
 });
 
-test('email verification status is unchanged when email address is unchanged', function () {
+test('email verification status is unchanged when email address is unchanged', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -79,7 +79,7 @@ test('email verification status is unchanged when email address is unchanged', f
     expect($user->refresh()->email_verified_at)->not->toBeNull();
 });
 
-test('user can delete their account', function () {
+test('user can delete their account', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
@@ -96,7 +96,7 @@ test('user can delete their account', function () {
     expect(auth()->check())->toBeFalse();
 });
 
-test('correct password must be provided to delete account', function () {
+test('correct password must be provided to delete account', function (): void {
     $user = User::factory()->create();
 
     $this->actingAs($user);
