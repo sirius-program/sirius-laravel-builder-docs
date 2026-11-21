@@ -1,0 +1,18 @@
+{
+    "owner": "sirius/ui",
+    "schema": 1,
+    "bundle": "980401a6d7b031d58f5a548dd49f935593607d7644f9ee01e2091973c01c3126",
+    "files": {
+        "SKILL.md": "bc0940db169cbf9c64cd162d7f95a061cb0b224e072e1e89ea87c8b0bff029ba",
+        "references/calendar.md": "0dc5c73e9e8ad8b372013648ae617433cc6094ae2d70c069bb8d869316be4e3c",
+        "references/chart.md": "8838a7a6f11d2257bc2ded7bdfa38e1b3774988e8411e6d05ef0fa175b777ce8",
+        "references/field-props.md": "24f1413986c137e09756e42c7f7c794eb7b96d8625411df223083cc12b6d0d2c",
+        "references/fields.md": "a78ffc9879d479663a4f81ad37e51742bad2599c191d513a31fe2e6c652c8590",
+        "references/overlays.md": "afb20106bff6709fd5cd4ba04d7c571202eca9a57897ed8765cb02f4c89fde8a",
+        "references/presentation-props.md": "05c09c056cbb60ac3eddfcdc13f91bf547ea9f8cbaa5f3c856e8b55406fcaeba",
+        "references/presentation.md": "a1b2c51381f8dfa0b4a5a3c36e8b4c39fa13fdfc87eba47cfb72042d1bc36837",
+        "references/recipes.md": "3befa765be13e7bc75b32ae695ea24f576b89fa535c60ac6a38058b73aa56110",
+        "references/setup.md": "2ed2eec1221c04044b0ee2844879da744df2e67b896d6ca89e71b8005184260e",
+        "references/table.md": "60e5607d454e4d28da366471aa726c1a54f44b0673b4756d3d9def7176377506"
+    }
+}

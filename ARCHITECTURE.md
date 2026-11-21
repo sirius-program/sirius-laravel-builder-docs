@@ -1,6 +1,6 @@
 # Architecture and Phase 0 foundation
 
-Phase 0 establishes executable conventions before CRUD features are implemented. The only production package class is `Sirius\LaravelBuilder\SiriusLaravelBuilderServiceProvider`. It extends Laravel's service provider and is listed in Composer's discovery metadata. It intentionally does not register `make:crud` yet.
+Phase 0 establishes executable conventions before CRUD features are implemented. At that milestone the only production package class was `Sirius\LaravelBuilder\SiriusLaravelBuilderServiceProvider`. It extends Laravel's service provider and is listed in Composer's discovery metadata. Phase 1 now registers `make:crud` with prerequisite checks; actual generation remains unavailable.
 
 ## Package structure
 
@@ -15,7 +15,7 @@ Phase 0 establishes executable conventions before CRUD features are implemented.
 | `tests/Support/` | Test-only AST boundary checker |
 | `.phpunit.cache/apps/` | Disposable per-test application artifacts; cleaned up after tests |
 
-The fixture Create action is a small example used to verify the architecture. It is not a production CRUD implementation or generated output. Its simple native Blade form exercises Livewire delegation without prematurely installing Sirius UI, which belongs to Phase 1.
+The fixture Create action is a small example used to verify the architecture. It is not a production CRUD implementation or generated output. Its simple native Blade form exercises Livewire delegation independently of the Sirius UI integration installed in Phase 1.
 
 ## Boundaries
 
@@ -23,7 +23,7 @@ Commands coordinate Discovery, Schema, Inference, Definitions, and Generators. P
 
 Generated actions belong under `App\Actions` and expose one public business method, `handle()`. Constructors are allowed. They authorize and validate even when called directly, explicitly assign permitted attributes, and persist through Eloquent. Livewire manages form state and delegates writes to actions. Its scoped read queries are allowed. Blade does not query the database.
 
-The package generator will only read schema metadata and write application files. Phase 0 does not yet have a generator to test; its boot test establishes that registering the provider does not mutate records or register future commands. Later generator phases must add direct no-record-write assertions around actual command execution.
+The package generator will only read schema metadata and write application files. Phase 0 does not yet have a generator to test; its boot test establishes that registering the provider does not mutate records. Phase 1 resolves the provider using Laravel package-manifest discovery in the isolated fixture and checks the command without record queries. Later generator phases must add direct no-record-write assertions around actual command execution.
 
 ## Executable architecture checks
 
@@ -45,13 +45,13 @@ From the package directory:
 
 ```shell
 composer install
-composer test:arch
-composer test:unit
-composer test:feature
+php vendor/bin/pest tests/Architecture
+php vendor/bin/pest tests/Unit
+php vendor/bin/pest tests/Feature
 composer test
 ```
 
-The full command runs Pint, Larastan/PHPStan at level 6 with PHP 8.3 syntax targeting, and all Pest suites. Static analysis includes production code, the AST checker, and representative application/package classes. The portable PHPStan view configuration resolves the fixture view directory for Windows and Linux.
+The full command runs Pint, Rector dry-run, Larastan/PHPStan at level 6 with PHP 8.3 syntax targeting, and all Pest suites. Static analysis includes production code, the AST checker, and representative application/package classes. The portable PHPStan view configuration resolves the fixture view directory for Windows and Linux.
 
 The package uses Pest 3 / PHPUnit 11 so tests can execute on PHP 8.3. Composer's platform target is PHP 8.3; Testbench 10 is used with Laravel 12, and Testbench 11 with Laravel 13. The package's local lock file is ignored because framework compatibility jobs must resolve independently. The docs app retains its own existing dependency lock and Pest 5 stack.
 
@@ -59,7 +59,7 @@ On PHP 8.5, the current Pest 3 architecture dependency can emit `ReflectionPrope
 
 ## Phase boundaries and next work
 
-Phase 1 adds real package services/configuration and Sirius UI integration, installs its AI skill into both projects, and establishes the docs UI shell. Database adapters, the interactive wizard, generated actions/views/tests, browser tests, and publishing stubs follow their respective plan phases.
+Phase 1 adds package services/configuration, read-only prerequisite checks, Sirius UI integration, and its standalone-managed AI skill in both projects. The docs app now has public introduction/documentation pages, anonymous theme preferences, and browser checks; its authentication routes and screens have been removed. Commands orchestrate `Support/Preflight`; `Schema/ConnectionCheck` handles database connectivity. Database adapters, the interactive wizard, generated actions/views/tests, generated-resource browser tests, and publishing stubs follow their respective plan phases. See [setup documentation](SETUP.md).
 
 Continue to update docs and READMEs and run `composer test` in every changed project after each phase. Record actual tested versions and results in the implementation plan. Full database, browser, and minimum-dependency release claims require their later acceptance checks.
 

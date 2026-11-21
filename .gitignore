@@ -38,3 +38,10 @@ yarn-error.log
 /boost.json
 /opencode.json
 /opencode.jsonc
+!/.agents/
+/.agents/*
+!/.agents/skills/
+/.agents/skills/*
+!/.agents/skills/sirius-ui-development/
+/tests/Browser/Screenshots/
+/tests/Browser/Traces/

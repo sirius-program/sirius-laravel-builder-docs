@@ -1,0 +1,1 @@
+<x-docs-code :source="'composer config repositories.sirius-builder path ../sirius-laravel-builder' . PHP_EOL . 'composer require sirius/laravel-builder:@dev'" />

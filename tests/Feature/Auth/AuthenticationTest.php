@@ -1,47 +1,9 @@
 <?php
 
-use App\Models\User;
+declare(strict_types=1);
 
-test('login screen can be rendered', function (): void {
-    $response = $this->get(route('login'));
-
-    $response->assertOk();
-});
-
-test('users can authenticate using the login screen', function (): void {
-    $user = User::factory()->create();
-
-    $response = $this->post(route('login.store'), [
-        'email'    => $user->email,
-        'password' => 'password',
-    ]);
-
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
-
-    $this->assertAuthenticated();
-});
-
-test('users can not authenticate with invalid password', function (): void {
-    $user = User::factory()->create();
-
-    $response = $this->post(route('login.store'), [
-        'email'    => $user->email,
-        'password' => 'wrong-password',
-    ]);
-
-    $response->assertSessionHasErrorsIn('email');
-
-    $this->assertGuest();
-});
-
-test('users can logout', function (): void {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post(route('logout'));
-
-    $response->assertRedirect(route('home'));
-
-    $this->assertGuest();
-});
+test('authentication endpoints are unavailable', function (string $method, string $path): void {
+    $this->call($method, $path)->assertNotFound();
+})->with([
+    ['GET', '/login'], ['POST', '/login'], ['GET', '/register'], ['POST', '/register'], ['POST', '/logout'],
+]);

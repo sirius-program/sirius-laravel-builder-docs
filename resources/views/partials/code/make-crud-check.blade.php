@@ -1,0 +1,1 @@
+<x-docs-code source="php artisan make:crud --check" />

@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-});
+Route::redirect('/docs', '/getting-started/introduction')->name('docs');
 
-require __DIR__ . '/settings.php';
+Route::view('/getting-started/introduction', 'docs.started.introduction')->name('started.introduction');
+Route::view('/getting-started/installation', 'docs.started.installation')->name('started.installation');
+Route::view('/getting-started/architecture', 'docs.started.architecture')->name('started.architecture');

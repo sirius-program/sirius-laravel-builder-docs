@@ -1,12 +1,12 @@
-# Sirius Laravel Builder — Phased Implementation Plan
+# Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phase 0 completed; Phases 1–14 not started.
+Status: Phases 0–1 completed; Phases 2–14 not started.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phase 0, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of Phase 0 does not authorize them automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 and 1, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -243,31 +243,31 @@ Acceptance: architecture tests execute against real representative classes, fail
 
 #### 1.1 Package services and configuration
 
-- [ ] Register `make:crud`, package configuration, publishing hooks, and dependency discovery using supported Laravel APIs.
-- [ ] Define configurable discovery paths, stub paths, and route defaults while keeping the agreed defaults intact.
-- [ ] Add clear diagnostics for missing dependencies, invalid app structure, and unavailable database connections.
-- [ ] Test provider discovery, command registration, configuration resolution, and preflight failures.
+- [x] Register `make:crud`, package configuration, publishing hooks, and dependency discovery using supported Laravel APIs.
+- [x] Define configurable discovery paths, stub paths, and route defaults while keeping the agreed defaults intact.
+- [x] Add clear diagnostics for missing dependencies, invalid app structure, and unavailable database connections.
+- [x] Test provider discovery, command registration, configuration resolution, and preflight failures.
 
 #### 1.2 Sirius UI and AI skills
 
-- [ ] Install a compatible Sirius UI release in the package dependency graph and docs app.
-- [ ] Install the complete Sirius UI AI Agent Skill in both projects under `.agents/skills/sirius-ui-development`.
-- [ ] Select one skill-installation owner per project. Use Boost or the standalone installer, not both for the same directory.
-- [ ] For the package root, use the supported installer service through its bootstrapped PHP/Testbench context if needed; do not assume an application `artisan` file exists.
-- [ ] Verify the installed skill includes its referenced files and document refresh behavior on upgrades.
-- [ ] Establish Sirius asset loading without duplicating Livewire/Alpine initialization.
+- [x] Install a compatible Sirius UI release in the package dependency graph and docs app.
+- [x] Install the complete Sirius UI AI Agent Skill in both projects under `.agents/skills/sirius-ui-development`.
+- [x] Select one skill-installation owner per project. Use Boost or the standalone installer, not both for the same directory.
+- [x] For the package root, use the supported installer service through its bootstrapped PHP/Testbench context if needed; do not assume an application `artisan` file exists.
+- [x] Verify the installed skill includes its referenced files and document refresh behavior on upgrades.
+- [x] Establish Sirius asset loading without duplicating Livewire/Alpine initialization.
 
 #### 1.3 Public documentation redesign
 
-- [ ] Replace the starter palette and theme with Sirius UI's light/dark tokens, typography, surfaces, borders, and semantic component colors; verify buttons, inputs, navigation, and code examples rather than changing only the primary color.
-- [ ] Remove documentation-app authentication: login, registration, logout, password reset, email verification, two-factor authentication, and account/profile/password settings screens and routes, where present.
-- [ ] Remove login/register/account links and authentication middleware or redirects from public documentation routes. Keep theme preferences available without an account.
-- [ ] Audit authentication-specific providers, configuration, frontend code, and dependencies such as Fortify; remove unused integration after confirming it is no longer referenced. Do not change the generated application's authentication/policy defaults.
-- [ ] Build a public homepage at `/` introducing Sirius Laravel Builder: package purpose, supported stack, action-based CRUD output, the `php artisan make:crud` workflow, page/dialog layout options, and links to Getting Started, documentation, and the source repository.
-- [ ] Clearly distinguish available functionality from planned features while development is incomplete; do not present the homepage as a completed release before the generator exists.
-- [ ] Add feature tests for public homepage/docs access and removal of obsolete auth/account routes; update existing authentication tests to reflect the new requirements.
-- [ ] Add browser checks for homepage navigation, responsive presentation, Sirius light/dark themes, and the absence of login/account controls or login redirects.
-- [ ] Add/update setup documentation and READMEs; run both projects' `composer test`, relevant browser checks, and the docs asset build.
+- [x] Replace the starter palette and theme with Sirius UI's light/dark tokens, typography, surfaces, borders, and semantic component colors; verify buttons, inputs, navigation, and code examples rather than changing only the primary color.
+- [x] Remove documentation-app authentication: login, registration, logout, password reset, email verification, two-factor authentication, and account/profile/password settings screens and routes, where present.
+- [x] Remove login/register/account links and authentication middleware or redirects from public documentation routes. Keep theme preferences available without an account.
+- [x] Audit authentication-specific providers, configuration, frontend code, and dependencies such as Fortify; remove unused integration after confirming it is no longer referenced. Do not change the generated application's authentication/policy defaults.
+- [x] Build a public homepage at `/` introducing Sirius Builder for Laravel: package purpose, supported stack, action-based CRUD output, the `php artisan make:crud` workflow, page/dialog layout options, and links to Getting Started, documentation, and the source repository.
+- [x] Clearly distinguish available functionality from planned features while development is incomplete; do not present the homepage as a completed release before the generator exists.
+- [x] Add feature tests for public homepage/docs access and removal of obsolete auth/account routes; update existing authentication tests to reflect the new requirements.
+- [x] Add browser checks for homepage navigation, responsive presentation, Sirius light/dark themes, and the absence of login/account controls or login redirects.
+- [x] Add/update setup documentation and READMEs; run both projects' `composer test`, relevant browser checks, and the docs asset build.
 
 Acceptance: a consuming fixture discovers the command, both projects have usable Sirius skills, and the docs site has a public package-introduction homepage with Sirius styling. Documentation-app authentication and account screens/routes are removed, and homepage/docs access does not require login.
 
@@ -501,11 +501,13 @@ No universal coverage percentage replaces the acceptance criteria. Each inferred
 
 ## 8. Execution evidence log
 
-Phase 0 is complete. Append one entry per completed phase using this structure:
+Phases 0–1 are complete. Append one entry per completed phase using this structure:
 
 | Phase | Date | Changed projects | Documentation/README updates | Commands and results | Remaining limitations |
 | --- | --- | --- | --- | --- | --- |
 | Phase 0 | November 20, 2026 | Package and docs | `ARCHITECTURE.md`, both READMEs, both `AGENTS.md` files, this plan | Package `composer test`: 33 tests / 60 assertions on PHP 8.3 with Laravel 12.73.0 / Testbench 10.12.0 and Laravel 13.43.0 / Testbench 11.3.0; Pint and PHPStan pass. Docs `composer test`: 23 tests / 58 assertions, Pint and PHPStan pass. | Handwritten fixtures only; generator, Sirius integration, browser tests, real database adapters, and the complete release matrix belong to later phases. |
+
+| Phase 1 | November 21, 2026 | Package and docs | `SETUP.md`, `ARCHITECTURE.md`, public docs pages, both READMEs and AI rules, this plan | Package `composer test`: 45 passed / 95 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 48 assertions. Pint, PHPStan, and Rector pass in both. Docs `composer test:browser`: 3 passed / 24 assertions in Chromium; `npm run build` passed; both Composer manifests validate. | Prerequisite checks only; no CRUD generation or stub publishing yet. Full framework/database/generated-resource browser matrix remains future work. |
 
 ### Phase 0 verification details
 
@@ -516,6 +518,17 @@ Phase 0 is complete. Append one entry per completed phase using this structure:
 - Local package dependencies were returned to Laravel 13 after checking Laravel 12. Minimum-patch dependency and full database/browser matrices are not claimed by this phase.
 - PHP 8.5 can emit three upstream `ReflectionProperty::setAccessible()` deprecations from the Pest 3 architecture test stack. The PHP 8.3 baseline passes without those notices; no vendor code or deprecation reporting was altered.
 
+### Phase 1 verification details
+
+- Installed released Sirius UI 0.1.0 in both projects and verified all 11 skill bundle files against each standalone installation manifest. The installer reports no customization conflicts. Refresh instructions are in `SETUP.md`.
+- Consumer fixtures load provider metadata through Laravel's `PackageManifest`; tests cover the discovered command, defaults/overrides, config publishing preservation, invalid paths, missing dependency diagnostics, and unavailable connections. The preflight executes no record queries and leaves routes untouched.
+- Docs routes are public. Fortify/Flux integrations and auth/account routes/views have been removed; negative endpoint tests verify 404 responses. Existing user models/migrations were preserved. Generated consumer authentication defaults remain unchanged.
+- Chromium checks cover navigation, persisted theme selection across reload/navigation, mobile overflow, and JavaScript errors. Desktop light/dark and mobile screenshots were visually reviewed. Browser tests use built assets without changing a running developer's Vite hot file.
+- The asset build succeeds with non-fatal upstream bundle-size and optional fontaine warnings. Asset optimization is not claimed complete.
+- An initial simultaneous `composer test` run encountered a shared Rector temporary-cache collision. Rector caches are now project-local under ignored `.phpunit.cache/rector`; both complete gates subsequently passed concurrently. An intermediate container-cache configuration failed validation and was corrected before the passing run.
+- The final package gate used PHP 8.3 and had no deprecations. The known upstream Pest 3 deprecations on PHP 8.5 remain documented under Phase 0; no vendor changes or suppression were introduced.
+- This phase verified the currently installed Laravel 13 dependency set; it does not claim a fresh Laravel 12 or complete minimum-version matrix run.
+
 Planning-only verification belongs in a separate note below; it does not complete Phase 0 or any feature phase.
 
 ### Planning-only verification — November 20, 2026
@@ -524,3 +537,50 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Ran `composer test` in `sirius-laravel-builder-docs`: passed. Pint passed; PHPStan reported zero errors; Pest passed 23 tests with 58 assertions.
 - Did not run package tests: the package directory is empty and has no Composer test harness yet. Creating that harness belongs to Phase 0.
 - All implementation phases remain unstarted. Browser tests, cross-database tests, and generated-code checks are planned work, not checks completed during planning.
+
+
+### Phase 1 documentation layout refinement — November 21, 2026
+
+- At the owner's request, aligned `/docs` and its child pages with the local Sirius UI documentation layout: fixed desktop sidebar, compact sticky header with breadcrumbs, and a mobile Slideover menu. The approved homepage retains its original presentation.
+- Used installed Sirius Menu/Menu Category/Menu Item, Breadcrumb, Slideover, Button, Icon, Link, Badge, and Separator components. Application CSS controls shell geometry and typography; Sirius owns navigation and overlay behavior.
+- Updated `SETUP.md` and the docs README. No package source or later-phase features changed.
+- Docs `composer test` passed: 29 tests / 48 assertions, with Pint, PHPStan, and Rector passing. `composer test:browser` passed: 4 tests / 33 assertions. `npm run build` passed with the existing optional-fontaine and bundle-size warnings. `git diff --check` passed.
+- Visually reviewed desktop light/dark, mobile navigation, and mobile content screenshots. Browser coverage checks sidebar navigation, mobile Slideover navigation, theme persistence, viewport overflow, and no JavaScript errors.
+
+
+### Phase 1 documentation typography refinement — November 21, 2026
+
+- Matched the Sirius UI documentation font stack and size tokens on `/docs`: loaded Instrument Sans through `@fonts`, with 16px body, 30px page headings, 20px section headings, and 18px subheadings at the default root size. Kept the landing-page typography separate.
+- Updated `SETUP.md`. The browser run exposed an early-click race in the docs theme control; it now remains disabled until theme initialization completes, with native and ARIA disabled states synchronized.
+- Docs `composer test` passed (29 tests / 48 assertions; Pint, PHPStan, and Rector passed). Final `composer test:browser` passed (4 tests / 33 assertions) after resolving the theme-control readiness failure. Asset build passed with the previously recorded non-fatal warnings. Reviewed the updated typography screenshot.
+
+
+### Phase 1 breadcrumb and content alignment refinement — November 21, 2026
+
+- Installed `diglactic/laravel-breadcrumbs` 10.1.0 and centralized the Home/Documentation/Getting started/Architecture trails in `routes/breadcrumbs.php`. The shared template renders trails with Sirius Breadcrumb components.
+- Centered the main container and footer within the workspace (80rem maximum), with a centered 56rem article. Added a Sirius Back to top link targeting a focusable anchor with clearance for the sticky header.
+- Updated `SETUP.md` and the docs README. Package implementation and homepage remain unchanged.
+- Docs `composer test` passed: 29 tests / 48 assertions, including passing Pint, PHPStan, and Rector gates. Browser tests passed: 5 tests / 39 assertions, including center alignment, parent breadcrumb navigation, and Back to top visibility below the sticky header. Reviewed the desktop screenshot. Asset build, Composer validation, and diff whitespace checks passed; existing non-fatal build warnings remain.
+
+
+### Phase 1 copyable code examples — November 21, 2026
+
+- Added a reusable `docs-code` component using Sirius Code and Button, with a language header and per-block Copy/Copied feedback. All docs code blocks use it; inline code remains inline.
+- Clipboard writes preserve exact text and line breaks. Denied or unavailable clipboard access selects the code for manual copying and announces the fallback. Buttons wait for JavaScript initialization; feedback resets after 2.5 seconds.
+- Updated `SETUP.md` and README. Final docs `composer test` passed: 29 tests / 48 assertions, including Pint, PHPStan, and Rector. Browser tests passed: 8 tests / 51 assertions. Clipboard success/denial/unavailability were controlled browser doubles; system clipboard permissions across browsers are not claimed tested.
+- An initial browser assertion ambiguously matched visible button and accessibility status text; it now targets the button label. The complete browser suite passed after correction. Asset build and whitespace checks passed; existing build warnings remain.
+
+
+### Phase 1 Livewire navigation refinement — November 21, 2026
+
+- Added `wire:navigate` to internal homepage, sidebar/mobile menu, brand, breadcrumb, and article links. Static page content remains server-rendered Blade; Livewire handles page transitions and browser history without full reloads. External and same-page anchor links remain native.
+- Reinitialize theme/copy controls on `livewire:navigated`, reset stale copied labels on history restoration, and clear feedback timers during navigation. Delegated event handlers stay registered once; Sirius manages its own navigation/overlay lifecycle.
+- Updated `SETUP.md` and README. Browser tests passed: 9 tests / 68 assertions, including a retained window marker proving no full reload, back/forward history, copy after transitions without duplicate handling, themes, and mobile navigation. Docs `composer test` passed: 29 tests / 48 assertions; Pint, PHPStan, and Rector passed. Asset build and whitespace checks passed, with existing non-fatal asset warnings unchanged.
+
+
+### CSS formatting maintenance — November 21, 2026
+
+- The Builder package currently has no authored CSS. Reformatted the docs application's authored `resources/css/app.css`: multiline blocks/declarations, four-space indentation, one blank line between rules, and descriptive English section comments. Vendor and generated assets were excluded.
+- Added durable CSS rules to both projects' `AGENTS.md` and the committed docs `CSS_STYLE.md`, linked from the docs README.
+- PostCSS parsing verified unchanged selectors, declaration values/order, and rule order. Checked all 180 rules for multiline formatting, spacing, indentation, and absence of tabs. The compiled CSS asset hash remained unchanged after rebuilding.
+- Package `composer test` passed on PHP 8.3: 45 tests / 95 assertions. Docs `composer test` passed: 29 tests / 48 assertions. Pint, PHPStan, and Rector passed in both projects. Docs browser checks passed: 9 tests / 68 assertions. Asset build and diff checks passed; existing non-fatal build warnings remain.

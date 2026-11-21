@@ -1,11 +1,11 @@
-# Sirius Laravel Builder Documentation
+# Sirius Builder for Laravel Documentation
 
-English documentation for the [Sirius Laravel Builder package](https://github.com/sirius-program/sirius-laravel-builder).
-
+- [CSS formatting rules](CSS_STYLE.md)
 - [Implementation plan and phase checklist](IMPLEMENTATION_PLAN.md)
+- [Setup, configuration, Sirius UI, and public documentation](SETUP.md)
 - [Architecture and Phase 0 testing foundation](ARCHITECTURE.md)
 
-The current milestone establishes the package skeleton and executable architecture baseline. The CRUD command, publishable stubs, Sirius UI integration, and working documentation demos are scheduled in later phases; they are not available yet.
+Phases 0–1 establish the architecture baseline, `make:crud --check`, publishable configuration, Sirius UI integration, and a public documentation homepage with anonymous light/dark theme preferences. CRUD generation, publishable stubs, and working resource demos remain planned features. Documentation authentication and account screens have been removed. Pages under `/docs` use the Sirius UI documentation shell with a fixed desktop sidebar, centrally maintained breadcrumbs, centered content, a Back to top link, responsive On this page navigation, mobile slideover navigation, copyable code examples, and Livewire SPA-like internal navigation.
 
 ## Documentation application development
 
@@ -16,6 +16,8 @@ composer install
 npm ci
 npm run build
 composer test
+npx playwright install chromium
+composer test:browser
 ```
 
-`composer test` clears the configuration cache, checks formatting, runs static analysis, and executes the application's tests. After every implementation phase, update the relevant documentation and README files and run this command in every changed project.
+`composer test` clears the configuration cache, checks formatting, runs static analysis and Rector checks, and executes non-browser tests. `composer test:browser` separately checks navigation, themes, and responsive behavior using built assets. After every implementation phase, update the relevant documentation and README files and run the required gates in every changed project.

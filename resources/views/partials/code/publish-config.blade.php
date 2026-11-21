@@ -1,0 +1,1 @@
+<x-docs-code source="php artisan vendor:publish --tag=sirius-builder-config" />
