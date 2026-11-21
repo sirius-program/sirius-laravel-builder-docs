@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–1 completed; Phases 2–14 not started.
+Status: Phases 0–2 completed; Phases 3–14 not started.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 and 1, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, and 2, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -130,16 +130,16 @@ Run architecture assertions against both the package and representative generate
 ### Wizard sequence
 
 1. Check dependency availability, app paths, route-file accessibility, and database connectivity.
-2. Recursively scan the application's `Models` directory for concrete Eloquent models. Display names relative to it, such as `User`, `Admin\Category`, and `Client\Object`. Handle duplicates by their relative namespace.
+2. Recursively scan the application's `Models` directory for concrete Eloquent models. Display names relative to it, such as `User`, `Admin\Category`, and `Client\Product`. Handle duplicates by their relative namespace.
 3. Ask for the resource name. Default to the selected model's relative namespace and name; preserve namespace segments unless the developer changes them.
-4. Ask for the table name. Default to the snake case of the plural model basename, independent of a resource rename. Also display the table resolved by the model.
+4. Ask for the table name. Default to the selected Eloquent model's `getTable()` result. This delegates conventional naming to Laravel and respects custom `$table` values and overridden table resolution. Resource renaming must not change the default; do not add the connection table prefix manually.
 5. Use the model's connection for inspection. If the entered table disagrees with the model's resolved table, explain the mismatch and stop final generation until it is corrected. Do not silently rewrite the model.
 6. Inspect columns and relevant constraints through normalized, connection-aware schema inspection. Prefer Laravel schema APIs; use driver-specific metadata queries where necessary.
 7. Iterate over columns in database order and configure each included field as specified below.
 8. Ask once for separate pages or Index dialogs.
 9. Offer optional operations, defaulting all available choices on. Always retain Index and Read/detail.
 10. Configure route identity, authentication/policy handling, and optional generated browser tests. Default to authenticated routes and policy enforcement; public access requires an explicit developer choice and still respects the selected policy behavior.
-11. Review model, connection, table, resource, fields, labels, validation, operations, layout, policies, files, routes, conflicts, and manual customization requirements.
+11. Review model, connection, table, resource, fields, labels, validation, operations, layout, policies, files, routes, detected breadcrumb integration/trails/target files, conflicts, and manual customization requirements.
 12. Offer **Edit a section**, **Restart**, **Generate**, and **Cancel**. Recompute dependent defaults and validation after edits; do not retain stale derived routes, options, or rules.
 13. Validate the complete definition, stage artifacts, recheck conflicts, and apply changes. Report written files, routes, test commands, and required customizations.
 
@@ -223,6 +223,16 @@ Action authorization is enforced even outside Livewire. Hidden buttons and selec
 
 Each phase depends on the preceding phases unless stated otherwise. The documentation and verification checkboxes in each phase include the full completion gate in Section 2.
 
+### Optional consumer breadcrumb integration
+
+When `diglactic/laravel-breadcrumbs` is installed and enabled and the consumer has existing breadcrumb route definitions, automatically plan matching CRUD breadcrumbs. This is optional integration; do not install the dependency or change consumer configuration automatically. Resolve `breadcrumbs.files` using the package configuration, including its default `routes/breadcrumbs.php`, a custom string path, or an array of paths. Account for the package's deferred provider when obtaining configuration. Disabled configuration, absent dependency, or a missing default file skips integration with an explicit review status; invalid configured files produce actionable diagnostics. Do not execute route files again merely to inspect them.
+
+Only use existing PHP targets contained within the consumer project, with safe path/symlink checks. If multiple configured files exist, require a target choice (or explicit noninteractive configuration) instead of guessing. Never invent a parent trail such as `home`: use a verified existing parent when configured, otherwise let the resource Index be the root.
+
+Use the exact generated named GET routes as breadcrumb names. Page mode registers Index and mandatory Show/detail, plus Create/Edit only when selected. Detail/Edit trails accept the same server-resolved record parameters as their routes and honor custom route keys; avoid exposing sensitive model attributes in labels. Dialog mode registers only Index, because dialog operations have no separate URL. Delete, Restore, and Permanent Delete never receive breadcrumb routes. Parent relationships must resolve without missing definitions or cycles.
+
+Preview every breadcrumb registration and target before generation. Use managed, idempotent blocks and the same conflict/overwrite/atomic rollback policy as `web.php`. Existing nonmanaged definitions are conflicts, not silent overwrite candidates. Publish the breadcrumb stub alongside other stubs. Generated views reuse the consumer's existing breadcrumb rendering/layout where present; avoid duplicate trails and do not rewrite host layouts automatically. Later generated UI acceptance must verify page trails and dialog behavior with and without the integration.
+
 ### Phase 0 — Prerequisite setup and executable architecture baseline
 
 This is the pre-feature gate requested by the owner. Bootstrap only what is necessary to run the architecture checks; complete it before Phase 1 feature work.
@@ -273,20 +283,20 @@ Acceptance: a consuming fixture discovers the command, both projects have usable
 
 ### Phase 2 — Resource definitions and recursive discovery
 
-- [ ] Implement typed definitions for resource identity, fields, operation selection, layout, policies, routes, and artifacts.
-- [ ] Implement recursive concrete-model discovery with stable relative names and deterministic ordering.
-- [ ] Discover enums recursively, preserving fully qualified names for duplicate basenames.
-- [ ] Detect SoftDeletes through inherited/recursive trait use.
-- [ ] Derive default resource identity, model-basename table suggestion, namespaces, view paths, URLs, and route names.
-- [ ] Validate renamed resources and detect namespace/path collisions before rendering.
-- [ ] Cover empty folders, nested models, abstract/non-model classes, duplicate names, invalid input, and discovery errors.
-- [ ] Add/update discovery and naming documentation and READMEs; run `composer test` in both changed projects.
+- [x] Implement typed definitions for resource identity, fields, operation selection, layout, policies, routes, and artifacts.
+- [x] Implement recursive concrete-model discovery with stable relative names and deterministic ordering.
+- [x] Discover enums recursively, preserving fully qualified names for duplicate basenames.
+- [x] Detect SoftDeletes through inherited/recursive trait use.
+- [x] Derive default resource identity, caller-supplied Eloquent table suggestion, namespaces, view paths, URLs, and route names.
+- [x] Validate renamed resources and detect namespace/path collisions before rendering.
+- [x] Cover empty folders, nested models, abstract/non-model classes, duplicate names, invalid input, and discovery errors.
+- [x] Add/update discovery and naming documentation and READMEs; run `composer test` in both changed projects.
 
-Acceptance: the sample models display as `User`, `Admin\Category`, and `Client\Object`, and nested names remain distinct throughout output planning.
+Acceptance: the sample models display as `User`, `Admin\Category`, and `Client\Product`, and nested names remain distinct throughout output planning.
 
 ### Phase 3 — Database inspection and normalized schema
 
-- [ ] Inspect the selected model's connection and actual table; preserve the requested default table prompt and detect mismatch.
+- [ ] Inspect the selected model's connection and actual table; use `getTable()` as the table prompt default and detect mismatch. Test conventional, custom `$table`, overridden `getTable()`, and renamed-resource cases.
 - [ ] Normalize columns, nullability, defaults, length, precision/scale, generated status, primary keys, and relevant indexes/foreign keys.
 - [ ] Implement and verify MySQL/MariaDB, PostgreSQL, and SQLite adapters or compatible framework-backed inspection paths.
 - [ ] Normalize driver aliases and inspect enum values where the engine exposes reliable metadata.
@@ -320,6 +330,8 @@ Acceptance: every supported schema/field combination has a deterministic suggest
 
 ### Phase 5 — Interactive wizard and review
 
+- [ ] Detect optional Diglactic Laravel Breadcrumbs integration and its configured route files without evaluating those files again; capture integration metadata in the resource definition. Cover absent package, absent route file, default/custom files, multiple files, and disabled configuration.
+- [ ] Select the sole safe existing breadcrumb file automatically; for multiple candidates require an explicit target in the wizard/configuration. Include planned trails, parent relationships, target file, and integration status in review; invalidate the preview after layout or route edits.
 - [ ] Implement the ordered prompt flow and searchable model/enum choices where appropriate.
 - [ ] Remove Read from the picker and always include Index/detail in the definition.
 - [ ] Add the resource-wide page/dialog choice and SoftDeletes-aware operation options.
@@ -336,7 +348,7 @@ Acceptance: developers can complete, inspect, revise, or cancel a resource confi
 
 #### 6.1 Template infrastructure
 
-- [ ] Implement shipped templates, deterministic rendering, and per-template app overrides.
+- [ ] Implement shipped templates, deterministic rendering, and per-template app overrides. Include the optional breadcrumb registration stub in publishing, override precedence, and placeholder documentation.
 - [ ] Publish stubs under the dedicated tag and document placeholders and customization boundaries.
 - [ ] Test override precedence, missing placeholders, invalid templates, repeated publishing, and preservation of customized files.
 
@@ -356,6 +368,8 @@ Acceptance: a published override changes generated output, and every generated f
 - [ ] Build an artifact manifest with intended paths, content, managed route blocks, and conflicts.
 - [ ] Stage and syntax-check generated artifacts before applying them.
 - [ ] Insert/update managed `web.php` blocks while preserving unrelated imports, code, and routes.
+- [ ] Automatically add/update breadcrumb registrations when the reviewed integration is available, following the optional breadcrumb contract below. Preserve unrelated definitions/imports, detect existing names, and include breadcrumb files in the same staging, syntax validation, conflict review, file-state recheck, and rollback as all generated artifacts.
+- [ ] Test breadcrumb integration with the real Diglactic package in an isolated fixture: default/custom/multiple files, page/dialog layouts, repeated generation, existing-name conflicts, dry run/cancel, concurrent edits, unsafe paths, parse failures, and rollback. Verify registered trails and parameters resolve correctly.
 - [ ] Detect existing route-name/path collisions, duplicate generation, and static/dynamic route ordering problems.
 - [ ] Require explicit per-file overwrite choices; fail noninteractive conflicts unless exact overwrite targets were supplied.
 - [ ] Implement path containment, safe escaping, file-state rechecks, backups, and recoverable rollback.
@@ -501,13 +515,15 @@ No universal coverage percentage replaces the acceptance criteria. Each inferred
 
 ## 8. Execution evidence log
 
-Phases 0–1 are complete. Append one entry per completed phase using this structure:
+Phases 0–2 are complete. Append one entry per completed phase using this structure:
 
 | Phase | Date | Changed projects | Documentation/README updates | Commands and results | Remaining limitations |
 | --- | --- | --- | --- | --- | --- |
 | Phase 0 | November 20, 2026 | Package and docs | `ARCHITECTURE.md`, both READMEs, both `AGENTS.md` files, this plan | Package `composer test`: 33 tests / 60 assertions on PHP 8.3 with Laravel 12.73.0 / Testbench 10.12.0 and Laravel 13.43.0 / Testbench 11.3.0; Pint and PHPStan pass. Docs `composer test`: 23 tests / 58 assertions, Pint and PHPStan pass. | Handwritten fixtures only; generator, Sirius integration, browser tests, real database adapters, and the complete release matrix belong to later phases. |
 
 | Phase 1 | November 21, 2026 | Package and docs | `SETUP.md`, `ARCHITECTURE.md`, public docs pages, both READMEs and AI rules, this plan | Package `composer test`: 45 passed / 95 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 48 assertions. Pint, PHPStan, and Rector pass in both. Docs `composer test:browser`: 3 passed / 24 assertions in Chromium; `npm run build` passed; both Composer manifests validate. | Prerequisite checks only; no CRUD generation or stub publishing yet. Full framework/database/generated-resource browser matrix remains future work. |
+
+| Phase 2 | November 21, 2026 | Package and docs | `DISCOVERY.md`, `ARCHITECTURE.md`, `SETUP.md`, both READMEs, this plan | Package `composer test`: 95 passed / 206 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 36 assertions. Pint, PHPStan, and Rector pass in both; whitespace checks pass. | Library discovery/planning services only; command wizard, schema inspection, enum options, and generation remain later phases. No UI changes or new browser run in this phase; no fresh multi-framework/database matrix claim. |
 
 ### Phase 0 verification details
 
@@ -584,3 +600,33 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Added durable CSS rules to both projects' `AGENTS.md` and the committed docs `CSS_STYLE.md`, linked from the docs README.
 - PostCSS parsing verified unchanged selectors, declaration values/order, and rule order. Checked all 180 rules for multiline formatting, spacing, indentation, and absence of tabs. The compiled CSS asset hash remained unchanged after rebuilding.
 - Package `composer test` passed on PHP 8.3: 45 tests / 95 assertions. Docs `composer test` passed: 29 tests / 48 assertions. Pint, PHPStan, and Rector passed in both projects. Docs browser checks passed: 9 tests / 68 assertions. Asset build and diff checks passed; existing non-fatal build warnings remain.
+
+
+### Phase 1 in-page documentation navigation — November 21, 2026
+
+- Added reusable On this page navigation using Sirius Link components and explicit per-page heading maps. Wide screens show a sticky right column matching Sirius UI docs; smaller screens place navigation above the article.
+- Added unique, focusable heading anchors with sticky-header scroll clearance on all three docs pages. Navigation updates with Livewire page transitions; native fragment links require no additional JavaScript.
+- Updated `SETUP.md` and README. Browser tests passed: 10 tests / 78 assertions, covering valid targets, anchor scrolling, updated links after transitions, mobile ordering, and viewport overflow. Reviewed the desktop screenshot.
+- Docs `composer test` passed: 29 tests / 48 assertions, with Pint, PHPStan, and Rector passing. Asset build and whitespace checks passed; existing non-fatal build warnings remain. A later attempt to reopen the mobile screenshot could not find the local artifact; mobile browser assertions had passed.
+
+
+### Phase 2 verification details — November 21, 2026
+
+- Added immutable typed resource/model/enum/field/operation/layout/policy/route/artifact definitions. Optional operations exclude Read; unsupported soft-delete operations and duplicate field columns are rejected.
+- Added deterministic PSR-4 recursive discovery, enum backing-type metadata, inherited/recursive SoftDeletes detection, namespace/source validation, and diagnostics for malformed PHP and unresolved autoload mappings. Discovery does not instantiate models; constructor-guard fixtures and an empty query log verify this behavior on an isolated Testbench connection.
+- Added default and renamed resource identities with original-model table suggestions, portable PHP-name validation, normalized view/URL segments, and pre-render identity/artifact collision checks. Case-insensitive duplicates, existing files/classes, blocked parents, and overlapping planned paths are covered without file writes.
+- Intentionally refined architecture checks to allow Model/SoftDeletes metadata references in Discovery, while rejecting DB/query/persistence access. Pure layers additionally reject delegated I/O through Discovery, Schema, or Support. Negative and positive witnesses pass against actual production definitions and discovery services.
+- The initial architecture run on PHP 8.5 showed the already documented three upstream Pest deprecations. Final full package verification used PHP 8.3 and passed without deprecations. The docs suite's current result is 29 tests / 36 assertions; no docs test files were changed in Phase 2.
+- `Client\Product` is the nested client model used in the acceptance fixture. Discovery relies on trusted PSR-4 autoload code, not arbitrary PHP sandboxing. Directory symlinks are not followed by the underlying traversal; complete writer containment/atomicity remains later work.
+- Both required Composer gates passed. Documentation-only changes in the docs app did not require new asset/browser runs. No dependency upgrade or production database access was needed.
+
+### Table default and breadcrumb contract revision — November 21, 2026
+
+- Replaced the earlier independent model-basename table suggestion with Eloquent's resolved `getTable()` value. Phase 2 naming now requires the resolved table as input; discovery still never constructs models. Selected-model resolution and prompt wiring remain Phase 3/5 responsibilities.
+- Added optional consumer Diglactic breadcrumb detection/review to Phase 5, a publishable registration stub to Phase 6, and automatic safe registration updates to Phase 7. Generator and wizard checkboxes remain unchecked; the existing docs application's breadcrumbs are separate from this planned consumer integration.
+- Verification: architecture prerequisite passed (5 tests / 39 assertions). Package `composer test` passed on PHP 8.3 (97 tests / 211 assertions); docs `composer test` passed (29 tests / 36 assertions). Pint, PHPStan, and Rector passed in both projects. Diff whitespace checks passed. No UI changes; browser/build checks were not rerun. Naming regression coverage verifies conventional and explicitly resolved custom tables, resource renaming, empty-table rejection, and no database queries.
+
+### Nested model example revision — November 21, 2026
+
+- Standardized the model example as `Client\Product` in the workflow, acceptance criteria, discovery documentation, and handwritten fixture; updated the discovery expectation accordingly. Reserved-name rejection remains covered separately with `Invalid\Object`.
+- Architecture prerequisite: 5 tests / 39 assertions passed using Pest directly (`composer test:arch` is unavailable in the current scripts). Full `composer test` passed in both projects: package 97 tests / 211 assertions on PHP 8.3; docs 29 tests / 36 assertions. Pint, PHPStan, Rector, and whitespace checks passed. No UI changes or browser/build rerun.

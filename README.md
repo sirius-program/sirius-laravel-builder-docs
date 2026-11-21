@@ -3,9 +3,10 @@
 - [CSS formatting rules](CSS_STYLE.md)
 - [Implementation plan and phase checklist](IMPLEMENTATION_PLAN.md)
 - [Setup, configuration, Sirius UI, and public documentation](SETUP.md)
+- [Resource definitions, model/enum discovery, and naming](DISCOVERY.md)
 - [Architecture and Phase 0 testing foundation](ARCHITECTURE.md)
 
-Phases 0–1 establish the architecture baseline, `make:crud --check`, publishable configuration, Sirius UI integration, and a public documentation homepage with anonymous light/dark theme preferences. CRUD generation, publishable stubs, and working resource demos remain planned features. Documentation authentication and account screens have been removed. Pages under `/docs` use the Sirius UI documentation shell with a fixed desktop sidebar, centrally maintained breadcrumbs, centered content, a Back to top link, responsive On this page navigation, mobile slideover navigation, copyable code examples, and Livewire SPA-like internal navigation.
+Phases 0–2 establish the architecture baseline, `make:crud --check`, publishable configuration, Sirius UI integration, and a public documentation homepage with anonymous light/dark theme preferences. Phase 2 adds typed resource definitions, recursive model/enum discovery, SoftDeletes detection, naming defaults, and collision checks through library services. Table suggestions now accept the selected model's Eloquent-resolved table, including custom table configuration. Automatic integration with existing consumer Diglactic breadcrumb routes is planned for the wizard/stub/generator phases. CRUD generation, the interactive wizard, publishable stubs, and working resource demos remain planned features. Documentation authentication and account screens have been removed. Pages under `/docs` use the Sirius UI documentation shell with a fixed desktop sidebar, centrally maintained breadcrumbs, centered content, a Back to top link, responsive On this page navigation, mobile slideover navigation, copyable code examples, and Livewire SPA-like internal navigation.
 
 ## Documentation application development
 

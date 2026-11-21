@@ -57,6 +57,16 @@ The package uses Pest 3 / PHPUnit 11 so tests can execute on PHP 8.3. Composer's
 
 On PHP 8.5, the current Pest 3 architecture dependency can emit `ReflectionProperty::setAccessible()` deprecations. They originate in the installed test dependency, not generated application code. Run the baseline suite on PHP 8.3 for a deprecation-free result; do not edit vendor files or suppress source checks to hide them.
 
+## Phase 2 discovery and definitions
+
+`Definitions` now holds immutable resource/model/enum/field/policy/route/artifact data and operation/layout enums. The boundary checker rejects dependencies on Discovery, Schema, and Support from pure layers, preventing delegated I/O. `Support/ResourceNamer` handles resource-name inflection without database or filesystem access and accepts the selected model's resolved table as an explicit input; it does not independently infer table names.
+
+`Discovery/ClassDiscovery` resolves PSR-4 classes recursively with deterministic ordering, checked source paths, and clear autoload errors. Model discovery reflects concrete Eloquent subclasses and recursively detects SoftDeletes without constructing models. Enum discovery preserves fully qualified names and backing types. Architecture checks permit exactly Eloquent Model/SoftDeletes metadata references in Discovery, while continuing to reject database access, query construction, and persistence. Positive and negative witnesses cover this deliberate refinement.
+
+Collision checks report overlapping identities and planned/existing artifact paths/classes without writing files. Representative discovery fixtures live in `tests/Fixtures/Discovery` and are included in strict-type checks and static analysis. The constructor-guard fixture and empty query log provide behavioral evidence of metadata-only discovery. Trusted autoload code can still have arbitrary top-level effects; this is not a PHP sandbox.
+
+See [discovery and naming](DISCOVERY.md) for the API and remaining phase boundaries.
+
 ## Phase boundaries and next work
 
 Phase 1 adds package services/configuration, read-only prerequisite checks, Sirius UI integration, and its standalone-managed AI skill in both projects. The docs app now has public introduction/documentation pages, anonymous theme preferences, and browser checks; its authentication routes and screens have been removed. Commands orchestrate `Support/Preflight`; `Schema/ConnectionCheck` handles database connectivity. Database adapters, the interactive wizard, generated actions/views/tests, generated-resource browser tests, and publishing stubs follow their respective plan phases. See [setup documentation](SETUP.md).

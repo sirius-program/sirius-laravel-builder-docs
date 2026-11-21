@@ -1,6 +1,6 @@
 # Package integration and public documentation
 
-Phase 1 provides configuration, dependency discovery, and prerequisite checks. It does **not** generate CRUD files. Recursive discovery, schema inspection, the wizard, and publishable generation stubs follow their own phases.
+Phase 1 provides configuration, dependency discovery, and prerequisite checks. It does **not** generate CRUD files. Phase 2 adds [recursive discovery and typed resource planning](DISCOVERY.md) as library services. Schema inspection, the interactive wizard, and publishable generation stubs follow their own phases.
 
 ## Install and check a consuming application
 
