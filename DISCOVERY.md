@@ -25,7 +25,7 @@ The result is a deterministically sorted list of immutable `ModelDefinition` obj
 
 Discovery recursively inspects PHP files and includes concrete Eloquent subclasses only. Abstract models, interfaces, traits, and other classes are excluded. Non-PHP files are ignored. Duplicate basenames remain distinct through relative names and fully qualified classes, such as `Admin\Category` and `Client\Category`.
 
-SoftDeletes detection includes parent classes and traits used by other traits. Discovery never constructs or boots models, resolves their tables/connections, or queries records. A fixture whose constructor throws verifies that model construction is unnecessary. Actual model table resolution belongs to Phase 3.
+SoftDeletes detection includes parent classes and traits used by other traits. Discovery never constructs or boots models, resolves their tables/connections, or queries records. A fixture whose constructor throws verifies that model construction is unnecessary. Phase 3 now resolves the selected model table through [SchemaInspector](DATABASE_INSPECTION.md); discovery remains separate.
 
 The discovery fixture uses `User`, `Admin\Category`, and `Client\Product` as concrete model examples, including nested namespaces.
 
@@ -76,7 +76,7 @@ For a selected `App\Models\Admin\Category`:
 | Route name prefix | `admin.categories.` |
 | Middleware | `['auth']` |
 
-Renaming the resource changes its output identity but not the table suggestion. The required second argument is the selected model's `getTable()` result: Laravel supplies its conventional default and respects custom `$table`, `setTable()`, and overridden resolution. The namer preserves that value and rejects an empty table; it never constructs the model or queries a connection. Selected-model resolution and the interactive prompt are wired in later phases. Do not prepend a connection table prefix to this value.
+Renaming the resource changes its output identity but not the table suggestion. The required second argument is the selected model's `getTable()` result: Laravel supplies its conventional default and respects custom `$table`, `setTable()`, and overridden resolution. The namer preserves that value and rejects an empty table; it never constructs the model or queries a connection. Phase 3 provides selected-model resolution through `SchemaInspector`; the interactive prompt remains Phase 5. Do not prepend a connection table prefix to this value.
 
 The optional fourth `identify()` argument supplies the application namespace. Resource and namespace segments must be valid PHP identifiers separated by backslashes. Whitespace, forward-slash paths, empty segments, reserved PHP/type names, and Windows device names are rejected. View/URL segments normalize with Studly then kebab casing; generated PHP namespace spelling is retained. This makes normalized-path collision detection necessary even for differently spelled PHP names.
 

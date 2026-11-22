@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–2 completed; Phases 3–14 not started.
+Status: Phases 0–3 completed; Phases 4–14 not started.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, and 2, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, 2, and 3, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -296,15 +296,15 @@ Acceptance: the sample models display as `User`, `Admin\Category`, and `Client\P
 
 ### Phase 3 — Database inspection and normalized schema
 
-- [ ] Inspect the selected model's connection and actual table; use `getTable()` as the table prompt default and detect mismatch. Test conventional, custom `$table`, overridden `getTable()`, and renamed-resource cases.
-- [ ] Normalize columns, nullability, defaults, length, precision/scale, generated status, primary keys, and relevant indexes/foreign keys.
-- [ ] Implement and verify MySQL/MariaDB, PostgreSQL, and SQLite adapters or compatible framework-backed inspection paths.
-- [ ] Normalize driver aliases and inspect enum values where the engine exposes reliable metadata.
-- [ ] Handle table prefixes and schema-qualified names without unsafe identifier interpolation.
-- [ ] Reject unsupported composite keys and explain ambiguous or unsupported metadata.
-- [ ] Prove inspection does not alter records/schema; test missing tables, inaccessible connections, custom keys, and custom model connections.
-- [ ] Run real-engine inspection tests, not SQLite substitutes for all drivers.
-- [ ] Add/update database compatibility documentation and READMEs; run `composer test` in both changed projects.
+- [x] Inspect the selected model's connection and actual table; use `getTable()` as the table prompt default and detect mismatch. Test conventional, custom `$table`, overridden `getTable()`, and renamed-resource cases.
+- [x] Normalize columns, nullability, defaults, length, precision/scale, generated status, primary keys, and relevant indexes/foreign keys.
+- [x] Implement and verify MySQL/MariaDB, PostgreSQL, and SQLite adapters or compatible framework-backed inspection paths.
+- [x] Normalize driver aliases and inspect enum values where the engine exposes reliable metadata.
+- [x] Handle table prefixes and schema-qualified names without unsafe identifier interpolation.
+- [x] Reject unsupported composite keys and explain ambiguous or unsupported metadata.
+- [x] Prove inspection does not alter records/schema; test missing tables, inaccessible connections, custom keys, and custom model connections.
+- [x] Run real-engine inspection tests, not SQLite substitutes for all drivers.
+- [x] Add/update database compatibility documentation and READMEs; run `composer test` in both changed projects.
 
 Acceptance: equivalent schemas produce equivalent normalized field metadata, and driver differences are explicitly represented and tested.
 
@@ -524,6 +524,7 @@ Phases 0–2 are complete. Append one entry per completed phase using this struc
 | Phase 1 | November 21, 2026 | Package and docs | `SETUP.md`, `ARCHITECTURE.md`, public docs pages, both READMEs and AI rules, this plan | Package `composer test`: 45 passed / 95 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 48 assertions. Pint, PHPStan, and Rector pass in both. Docs `composer test:browser`: 3 passed / 24 assertions in Chromium; `npm run build` passed; both Composer manifests validate. | Prerequisite checks only; no CRUD generation or stub publishing yet. Full framework/database/generated-resource browser matrix remains future work. |
 
 | Phase 2 | November 21, 2026 | Package and docs | `DISCOVERY.md`, `ARCHITECTURE.md`, `SETUP.md`, both READMEs, this plan | Package `composer test`: 95 passed / 206 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 36 assertions. Pint, PHPStan, and Rector pass in both; whitespace checks pass. | Library discovery/planning services only; command wizard, schema inspection, enum options, and generation remain later phases. No UI changes or new browser run in this phase; no fresh multi-framework/database matrix claim. |
+| Phase 3 | November 22, 2026 | Package and docs | `DATABASE_INSPECTION.md`, setup/discovery/architecture docs, both READMEs, this plan | Package `composer test`: 133 passed / 366 assertions; `composer test:database`: 10 passed / 89 assertions; docs `composer test`: 29 passed / 36 assertions. Pint/PHPStan/Rector passed. | Real local SQLite/MySQL/MariaDB/PostgreSQL tested; hosted CI versions remain unverified. Schema library only; wizard/generation remain later phases. |
 
 ### Phase 0 verification details
 
@@ -630,3 +631,24 @@ Planning-only verification belongs in a separate note below; it does not complet
 
 - Standardized the model example as `Client\Product` in the workflow, acceptance criteria, discovery documentation, and handwritten fixture; updated the discovery expectation accordingly. Reserved-name rejection remains covered separately with `Invalid\Object`.
 - Architecture prerequisite: 5 tests / 39 assertions passed using Pest directly (`composer test:arch` is unavailable in the current scripts). Full `composer test` passed in both projects: package 97 tests / 211 assertions on PHP 8.3; docs 29 tests / 36 assertions. Pint, PHPStan, Rector, and whitespace checks passed. No UI changes or browser/build rerun.
+
+### Phase 3 preparation — November 22, 2026
+
+- Architecture prerequisite passed: 5 tests / 39 assertions. Schema implementation is pending the owner's local test-database setup.
+- Added owner-only environment-file rules in both projects, ignored package `.env.*` variants, and documented `.env.database` variables in `SETUP.md`. No environment files were created or edited.
+- Added a GitHub Actions PostgreSQL/MariaDB service job and real PDO connection checks. Full schema tests and MySQL service coverage remain Phase 3 work. No GitHub-hosted execution has been observed.
+- Local quality gates passed: package `composer test` 97 tests / 211 assertions (PHP 8.3), docs `composer test` 29 tests / 36 assertions; Pint/PHPStan/Rector pass. Workflow YAML parses successfully and whitespace checks pass. Database connections were not attempted locally while waiting for owner configuration; CI service execution remains unverified.
+
+### Phase 3 implementation — November 22, 2026
+
+- Added read-only selected-model schema inspection, typed metadata, alias normalization, diagnostics, custom table/key/connection support, and PostgreSQL native enum/identity catalog reads. Discovery remains construction-free. No command wizard or generator was added.
+- Added an opt-in real-engine runner loading only the owner-managed `.env.database`; no environment file was written. Ordinary tests still use SQLite memory. Dedicated local test database names may differ from the sample; loopback/system-database guards apply. Test cleanup targets only unique test-owned objects.
+- Real-engine suite passed: 10 tests / 89 assertions on SQLite 3.53.4, MySQL 9.7.0, MariaDB 13.0.2, PostgreSQL 19.0. Cases include no inspection writes or row/schema changes, prefixes, custom keys, native enums, PostgreSQL identity and schema qualification.
+- Updated GitHub Actions to run this suite against MySQL 8.4, MariaDB 11.4, PostgreSQL 17. Those hosted versions have not been executed locally or verified in GitHub during this task.
+- Added `DATABASE_INSPECTION.md`; updated setup, discovery, architecture, and both READMEs. Final `composer test` passed in the package (133 tests / 366 assertions, PHP 8.3) and docs (29 tests / 36 assertions). Pint, PHPStan, and Rector passed in both projects. Workflow YAML and whitespace checks passed. No UI changes; browser/build checks were not rerun. Actual local engines above do not establish the whole version/framework matrix.
+
+### Phase 3 database matrix correction — November 22, 2026
+
+- Replaced the schema-only CI entry with SQLite/MySQL/MariaDB/PostgreSQL matrix entries, each running full `composer test`, including the selected engine's schema cases.
+- Added an explicit process selector, selected-connection feature tests, unique per-test external table prefixes/cleanup, and a regression assertion that the active driver matches the request. SQLite-specific tests keep explicit SQLite connections; unselected local runs remain SQLite memory only.
+- Updated both project rules and documentation. No environment files were edited. Local PHP 8.3 full gates passed for all four selectors: 133 ordinary tests / 367 assertions per selector, plus SQLite 1 schema test / 17 assertions, MySQL 3 / 23, MariaDB 3 / 23, PostgreSQL 3 / 26. Docs `composer test` passed: 29 / 36. Pint/PHPStan/Rector, matrix YAML validation, and whitespace checks passed. An additional unselected PHP 8.5 run exited successfully with the previously known 3 upstream deprecations (130 passed / 367 assertions). Hosted GitHub Actions execution remains unverified.

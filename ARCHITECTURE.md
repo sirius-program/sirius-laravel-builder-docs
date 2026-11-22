@@ -74,3 +74,7 @@ Phase 1 adds package services/configuration, read-only prerequisite checks, Siri
 Continue to update docs and READMEs and run `composer test` in every changed project after each phase. Record actual tested versions and results in the implementation plan. Full database, browser, and minimum-dependency release claims require their later acceptance checks.
 
 References: [Pest architecture testing](https://pestphp.com/docs/arch-testing), [Orchestra Testbench](https://github.com/orchestral/testbench).
+
+## Phase 3 schema boundary
+
+`Schema/SchemaInspector` reads metadata through the selected model connection and returns pure typed column/table/index/foreign-key definitions. It uses Laravel schema APIs and a bound PostgreSQL catalog query, never mutations. `ColumnNormalizer` retains native metadata and warns on unknown types instead of guessing unsupported constraints. Schema-layer persistence calls remain prohibited by architecture tests. The opt-in real-engine test harness is outside production code; it and explicitly selected full engine runs read the owner-managed `.env.database` and creates disposable test artifacts. Unselected runs retain SQLite memory isolation; explicitly selected full runs use per-test unique table prefixes on the chosen disposable engine. See [database inspection](DATABASE_INSPECTION.md).
