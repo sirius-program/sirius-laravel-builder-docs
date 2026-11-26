@@ -12,6 +12,8 @@ Phases 0–4 establish the architecture baseline, `make:crud --check`, publishab
 
 ## Documentation application development
 
+Console messages now use Laravel's Termwind-backed components. The Phase 5 wizard will use Laravel Prompts with Laravel's built-in native Windows fallback; see [console messages and Windows support](SETUP.md#console-messages-and-windows-support). CI includes a native Windows SQLite full-gate job alongside the Linux database matrix.
+
 Use the existing Laravel application setup and installed dependency requirements. The current local application runs on PHP 8.5; its Pest 5 development stack requires PHP 8.4 or later. This is separate from the package's PHP 8.3 runtime target.
 
 ```shell

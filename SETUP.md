@@ -19,6 +19,14 @@ Laravel discovers the service provider through Composer metadata. `--check` retu
 
 The default database check does not yet discover models or inspect model-specific connections. Read-only path checks are not the later generator's filesystem containment or atomic-write guarantees.
 
+### Console messages and Windows support
+
+The existing command uses Laravel's Termwind-backed console components for success, warning, and error messages. `--no-ansi` produces plain output; `--quiet` suppresses normal messages. Dynamic diagnostic content is escaped by the framework's component renderer.
+
+Phase 5 will use Laravel Prompts for wizard questions. According to the [Laravel Prompts documentation](https://github.com/laravel/docs/blob/13.x/prompts.md), the rich interface supports macOS, Linux, and Windows through WSL. Native Windows receives Laravel's automatic Symfony Console fallback. Both modes must preserve defaults, validation, choices, and the review/edit/cancel workflow, although search and multiple-choice presentation differ. Custom [Termwind](https://github.com/nunomaduro/termwind) rendering is reserved for the future review screen and must respect the command output and escape dynamic values. The wizard is not implemented yet.
+
+The `windows-sqlite` GitHub Actions job runs full `composer test` on native Windows with PHP 8.3 and SQLite, including selected-engine schema checks. Existing Linux framework and database matrix jobs remain in place. Wizard fallback acceptance tests will be added in Phase 5.
+
 ## Configuration
 
 The publishing tag writes `config/sirius-builder.php`. Re-publishing preserves an existing file unless `--force` is supplied explicitly.
