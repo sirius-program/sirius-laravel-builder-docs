@@ -40,7 +40,7 @@ $enums = app(EnumDiscovery::class)->discover(
 );
 ```
 
-`EnumDefinition` contains the fully qualified `className`, relative name, and `backingType` (`string`, `int`, or `null` for a pure enum). Duplicate names in different namespaces remain selectable independently. Enum option generation and database-value compatibility checks belong to later field/schema phases.
+`EnumDefinition` contains the fully qualified `className`, relative name, and `backingType` (`string`, `int`, or `null` for a pure enum). Duplicate names in different namespaces remain selectable independently. Phase 4 now provides `EnumCaseDiscovery` and pure enum option mapping/compatibility checks; see [field configuration](FIELD_CONFIGURATION.md).
 
 ## Discovery requirements and errors
 
@@ -90,7 +90,7 @@ The `Definitions` layer contains immutable data objects and backed enums. It has
 - `Layout` chooses `Pages` or `Dialogs`.
 - `OperationSelection` defaults to Create, Update, and Delete; SoftDeletes adds Restore and PermanentDelete. Explicit empty selections are supported. Invalid soft-delete operations are rejected and duplicates are normalized into a stable order. Index/detail remain mandatory resource capabilities and are not optional mutation enum cases.
 - `PolicyDefinition` defaults to enforcement. Policy existence and authorization behavior are verified in later generation/application phases.
-- `FieldDefinition` captures column, label, `FieldType`, rules, writability, and an optional select endpoint or enum. A select cannot use both sources; absent endpoints use `null`. Schema-based inference, pipe parsing, option generation, and runtime field validation are deferred.
+- `FieldDefinition` captures column, label, `FieldType`, rules, writability, and an optional select endpoint or enum. A select cannot use both sources; absent endpoints use `null`. Phase 4 now groups this field with structured validation and normalization metadata in `FieldPlan`; see [field configuration](FIELD_CONFIGURATION.md).
 - `RouteDefinition` stores URL/name prefixes and middleware.
 - `ArtifactDefinition` stores `ArtifactKind`, a canonical relative file path, and an optional fully qualified class name. It does not render or write files.
 

@@ -26,7 +26,7 @@ All returned definitions are immutable and independent of Laravel/database servi
 
 - `TableDefinition`: connection name, canonical Laravel driver, logical table reference, primary key, columns, indexes, foreign keys, and diagnostic warnings.
 - `ColumnDefinition`: column name, normalized type, original native type, nullable flag, raw default, optional length/decimal precision/scale, unsigned flag, auto-increment status, generated status/expression, and optional enum values.
-- `IndexDefinition`: name, ordered columns, unique/primary flags, and optional index type.
+- `IndexDefinition`: name, ordered columns, unique/primary flags, optional index type, and an `unconditional` flag backed by catalog evidence.
 - `ForeignKeyDefinition`: optional name, ordered local/referenced columns, referenced schema/table, and update/delete actions.
 
 Columns retain database order. Type aliases normalize to `string`, `integer`, `decimal`, `float`, `boolean`, `text`, `timestamp`, `datetime`, `time`, `date`, `json`, `uuid`, `binary`, or `enum`; unsupported types become `unknown` with a warning. For example, PostgreSQL `int8` and MySQL `bigint` both normalize to `integer`. `tinyint(1)` remains integer because it does not prove a boolean constraint. The native type is retained for subsequent decisions.
@@ -45,7 +45,7 @@ Defaults retain the database's original literal/expression representation; they 
 
 SQLite CHECK constraints are not reverse-engineered into enums. Laravel may represent SQLite string/decimal declarations without their original length/precision. PostgreSQL domains, arrays, and other unsupported types require explicit follow-up configuration rather than guessed field mappings. Native PostgreSQL enum types are supported; a domain over an enum is not treated as a native enum.
 
-Index column lists alone do not describe partial predicates, expression indexes, included columns, or MySQL prefix lengths. Every result includes a diagnostic prohibiting unconditional uniqueness inference from those lists alone. Phase 4 must obtain sufficient evidence or require explicit configuration before generating such validation.
+Index column lists alone do not describe partial predicates, expression indexes, included columns, or MySQL prefix lengths. Every result includes a diagnostic prohibiting unconditional uniqueness inference from those lists alone. Phase 4 adds read-only catalog evidence for `IndexDefinition.unconditional`; field inference uses only proven single-column constraints and reports the rest for explicit configuration.
 
 Missing/composite primary keys and a model key that disagrees with the database key are rejected. Missing tables, invalid table references, unsupported drivers, and unavailable connections produce `SchemaInspectionException`. Connection exceptions are sanitized rather than including credentials, raw DSNs, or their original messages.
 

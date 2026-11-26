@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–3 completed; Phases 4–14 not started.
+Status: Phases 0–4 completed; Phases 5–14 not started.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, 2, and 3, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, 2, 3, and 4, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -170,7 +170,7 @@ No silent lossy mapping is acceptable. If metadata cannot identify a database en
 
 ### Special field contracts
 
-- **Password:** generate the original field and `{column}_confirmation`; use the label `Confirm {label}`. Validate confirmation; never persist it. Hash passwords while respecting an existing hashed cast/mutator to avoid double hashing. Never prefill, list, or display stored password hashes. Blank Update passwords preserve the existing value; nonblank passwords require confirmation.
+- **Password:** generate the original field and `{column}_confirmation`; ask for the confirmation label, defaulting to `Confirm {label}`. Persist the chosen label in the field plan. Validate confirmation; never persist it. Hash passwords while respecting an existing hashed cast/mutator to avoid double hashing. Never prefill, list, or display stored password hashes. Blank Update passwords preserve the existing value; nonblank passwords require confirmation.
 - **Select:** ask exactly one additional field-source question: the endpoint. A blank answer generates `options=[]` and omits `search-url` (or uses `null`); an empty-string `search-url` is invalid in the inspected Sirius release. Do not invent an endpoint or relationship.
 - **Remote select:** follow Sirius's same-origin GET contract: `q`/`page` for searching and `values[]` for resolving initial selections. Expected JSON is `{"options":[{"value":"1","label":"Example"}],"hasMore":false}`. Document endpoint authentication, authorization, record scoping, and initial-label resolution. The generator does not contact the endpoint during scaffolding.
 - **PHP enum:** recursively discover concrete enum definitions under `App\Enums`. Map backed cases to backing values and pure cases to case names, with title-cased case labels. Generate lists of `{value, label}` records, not associative maps. Reject invalid/empty/duplicate option IDs and incompatible database values with actionable messages. Handle existing enum casts correctly.
@@ -312,19 +312,19 @@ Acceptance: equivalent schemas produce equivalent normalized field metadata, and
 
 #### 4.1 Inclusion and field selection
 
-- [ ] Implement inclusion defaults, title-case labels, ordered type candidates, and `_id` precedence.
-- [ ] Implement password confirmation metadata, endpoint-backed select configuration, and enum-to-option mapping.
-- [ ] Implement supported additional types and explicit unsupported-type handling.
-- [ ] Keep generated columns read-only and identify omitted required data that needs application customization.
+- [x] Implement inclusion defaults, title-case labels, ordered type candidates, and `_id` precedence.
+- [x] Implement password confirmation metadata with a configurable label (default `Confirm {label}`), endpoint-backed select configuration, and enum-to-option mapping.
+- [x] Implement supported additional types and explicit unsupported-type handling.
+- [x] Keep generated columns read-only and identify omitted required data that needs application customization.
 
 #### 4.2 Validation and normalization
 
-- [ ] Infer schema-aware baseline validation and integrate selected-field semantics.
-- [ ] Support pipe-based edits, shared/Create/Update rules, and structured dynamic constraints.
-- [ ] Handle nullable/default values, trusted Update uniqueness, foreign keys, enum compatibility, and decimal precision.
-- [ ] Define canonical conversions for select IDs, booleans, currency, dates, phone values, JSON, and existing casts.
-- [ ] Cover precedence, boundary values, malformed rules, password confirmation, incompatible enums, and unsupported mappings with focused tests.
-- [ ] Add/update field mapping and validation documentation and READMEs; run `composer test` in both changed projects.
+- [x] Infer schema-aware baseline validation and integrate selected-field semantics.
+- [x] Support pipe-based edits, shared/Create/Update rules, and structured dynamic constraints.
+- [x] Handle nullable/default values, trusted Update uniqueness, foreign keys, enum compatibility, and decimal precision.
+- [x] Define canonical conversions for select IDs, booleans, currency, dates, phone values, JSON, and existing casts.
+- [x] Cover precedence, boundary values, malformed rules, password confirmation, incompatible enums, and unsupported mappings with focused tests.
+- [x] Add/update field mapping and validation documentation and READMEs; run `composer test` in both changed projects.
 
 Acceptance: every supported schema/field combination has a deterministic suggestion and can be edited without losing required dynamic validation behavior.
 
@@ -332,7 +332,7 @@ Acceptance: every supported schema/field combination has a deterministic suggest
 
 - [ ] Detect optional Diglactic Laravel Breadcrumbs integration and its configured route files without evaluating those files again; capture integration metadata in the resource definition. Cover absent package, absent route file, default/custom files, multiple files, and disabled configuration.
 - [ ] Select the sole safe existing breadcrumb file automatically; for multiple candidates require an explicit target in the wizard/configuration. Include planned trails, parent relationships, target file, and integration status in review; invalidate the preview after layout or route edits.
-- [ ] Implement the ordered prompt flow and searchable model/enum choices where appropriate.
+- [ ] Implement the ordered prompt flow and searchable model/enum choices where appropriate. For each Password field, ask for its confirmation label after the main label/type, defaulting to `Confirm {label}`. Preserve custom labels during review edits; recompute the default when the main label changes if it was not customized.
 - [ ] Remove Read from the picker and always include Index/detail in the definition.
 - [ ] Add the resource-wide page/dialog choice and SoftDeletes-aware operation options.
 - [ ] Add route/authentication/policy configuration and missing-policy diagnostics.
@@ -525,6 +525,7 @@ Phases 0–2 are complete. Append one entry per completed phase using this struc
 
 | Phase 2 | November 21, 2026 | Package and docs | `DISCOVERY.md`, `ARCHITECTURE.md`, `SETUP.md`, both READMEs, this plan | Package `composer test`: 95 passed / 206 assertions on PHP 8.3, Laravel 13.43.0 / Testbench 11.3.0. Docs `composer test`: 29 passed / 36 assertions. Pint, PHPStan, and Rector pass in both; whitespace checks pass. | Library discovery/planning services only; command wizard, schema inspection, enum options, and generation remain later phases. No UI changes or new browser run in this phase; no fresh multi-framework/database matrix claim. |
 | Phase 3 | November 22, 2026 | Package and docs | `DATABASE_INSPECTION.md`, setup/discovery/architecture docs, both READMEs, this plan | Package `composer test`: 133 passed / 366 assertions; `composer test:database`: 10 passed / 89 assertions; docs `composer test`: 29 passed / 36 assertions. Pint/PHPStan/Rector passed. | Real local SQLite/MySQL/MariaDB/PostgreSQL tested; hosted CI versions remain unverified. Schema library only; wizard/generation remain later phases. |
+| Phase 4 | November 26, 2026 | Package and docs | `FIELD_CONFIGURATION.md`, schema/discovery/setup/architecture docs, both READMEs, this plan | Full `composer test`: 198 passed / 532 assertions per SQLite/MySQL/MariaDB/PostgreSQL selection, plus selected-engine schema suites; docs 29 / 36. Pint/PHPStan/Rector pass. | Library field/validation services only. Confirmation-label prompt belongs to Phase 5; generated persistence, hashing, sanitization and UI remain later phases. No environment files edited. |
 
 ### Phase 0 verification details
 
@@ -652,3 +653,17 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Replaced the schema-only CI entry with SQLite/MySQL/MariaDB/PostgreSQL matrix entries, each running full `composer test`, including the selected engine's schema cases.
 - Added an explicit process selector, selected-connection feature tests, unique per-test external table prefixes/cleanup, and a regression assertion that the active driver matches the request. SQLite-specific tests keep explicit SQLite connections; unselected local runs remain SQLite memory only.
 - Updated both project rules and documentation. No environment files were edited. Local PHP 8.3 full gates passed for all four selectors: 133 ordinary tests / 367 assertions per selector, plus SQLite 1 schema test / 17 assertions, MySQL 3 / 23, MariaDB 3 / 23, PostgreSQL 3 / 26. Docs `composer test` passed: 29 / 36. Pint/PHPStan/Rector, matrix YAML validation, and whitespace checks passed. An additional unselected PHP 8.5 run exited successfully with the previously known 3 upstream deprecations (130 passed / 367 assertions). Hosted GitHub Actions execution remains unverified.
+
+### Phase 4 implementation — November 22, 2026
+
+- Architecture prerequisite passed (5 tests / 46 assertions). Added pure field suggestions/plans, editable shared/Create/Update rules, retained structured constraints, enum option mapping, and canonical values. Resource definitions can retain the full plans without losing dynamic validation metadata.
+- Added enum reflection outside inference, a Laravel validation adapter requiring trusted model identity for unique Update checks, and read-only catalog evidence that prevents partial/expression/prefix/composite indexes from becoming unsafe single-column unique validation.
+- Added regression coverage for canonical numeric bounds, JSON cast behavior, date/time precision, password omission/confirmation, readonly fields, and validation on real selected connections. Enabled prefixed test index/constraint names to avoid collisions on shared disposable databases.
+- Added `FIELD_CONFIGURATION.md`; updated setup, schema/discovery/architecture docs, both READMEs, and this plan. No environment files or UI were changed. Wizard, generated hashing/sanitization, and rendering remain later phases.
+- Completed on November 26, 2026 after the confirmation-label revision below. Full PHP 8.3 matrix gates passed: 198 tests / 532 assertions for each SQLite/MySQL/MariaDB/PostgreSQL selection; additional schema acceptance checks passed (SQLite 1 / 19, MySQL 3 / 24, MariaDB 3 / 24, PostgreSQL 3 / 27). Docs `composer test` passed: 29 tests / 36 assertions. Pint, PHPStan, Rector, and whitespace checks passed. No UI changes or browser/build rerun. Hosted CI and unexecuted dependency combinations are not claimed.
+
+### Phase 4 confirmation-label revision — November 26, 2026
+
+- Added `confirmationLabel` to field planning; null uses `Confirm {label}`, while a nonempty custom label is retained in confirmation metadata and subsequent validation edits. Empty/whitespace labels and labels supplied for non-password fields are rejected.
+- Updated the Phase 5 wizard contract to ask this question explicitly and preserve customized answers. No wizard UI is implemented in Phase 4.
+- Added explicit ULID metadata mapping and validation without inferring ULIDs from string length. Architecture was rechecked before this revision (5 tests / 59 assertions). Final matrix and docs results are recorded above; no environment files were edited.
