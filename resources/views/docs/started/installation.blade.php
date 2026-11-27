@@ -30,8 +30,8 @@
     
     <h2 id="check-application" tabindex="-1">Check your application</h2>
     @include('partials.code.make-crud-check')
-    <p>A successful check returns exit code 0. Invalid paths, missing dependencies, or an unavailable connection return exit code 1 with a diagnostic. The check connects to the default database without querying records. Model-specific inspection will follow in a later milestone.</p>
-    <p>Running <code>make:crud</code> without <code>--check</code> reports that generation is unavailable and exits with code 1. It does not create placeholder resources.</p>
+    <p>A successful check returns exit code 0. Invalid paths, missing dependencies, or an unavailable connection return exit code 1 with a diagnostic. The check connects to the default database without querying records. The interactive wizard then inspects the selected model on its own connection.</p>
+    <p>Running <code>make:crud</code> without <code>--check</code> opens the interactive resource wizard. Review the planned files, routes, validation, and breadcrumbs. Choose Cancel to exit successfully.</p>
     
     <h2 id="publish-configuration" tabindex="-1">Publish configuration</h2>
     @include('partials.code.publish-config')

@@ -15,7 +15,7 @@ php artisan make:crud --check
 php artisan vendor:publish --tag=sirius-builder-config
 ```
 
-Laravel discovers the service provider through Composer metadata. `--check` returns 0 when prerequisites are ready and 1 with actionable diagnostics otherwise. It checks dependency classes, configured paths, and connectivity to the default database. It executes no record queries, writes no records, and generates no application files. Running without `--check` reports that generation is not available and returns 1, even when prerequisites pass.
+Laravel discovers the service provider through Composer metadata. `--check` returns 0 when prerequisites are ready and 1 with actionable diagnostics otherwise. It checks dependency classes, configured paths, and connectivity to the default database. It executes no record queries, writes no records, and generates no application files. Run `php artisan make:crud` interactively to [configure and review a resource](WIZARD.md).
 
 The default database check does not yet discover models or inspect model-specific connections. Read-only path checks are not the later generator's filesystem containment or atomic-write guarantees.
 
@@ -23,9 +23,9 @@ The default database check does not yet discover models or inspect model-specifi
 
 The existing command uses Laravel's Termwind-backed console components for success, warning, and error messages. `--no-ansi` produces plain output; `--quiet` suppresses normal messages. Dynamic diagnostic content is escaped by the framework's component renderer.
 
-Phase 5 will use Laravel Prompts for wizard questions. According to the [Laravel Prompts documentation](https://github.com/laravel/docs/blob/13.x/prompts.md), the rich interface supports macOS, Linux, and Windows through WSL. Native Windows receives Laravel's automatic Symfony Console fallback. Both modes must preserve defaults, validation, choices, and the review/edit/cancel workflow, although search and multiple-choice presentation differ. Custom [Termwind](https://github.com/nunomaduro/termwind) rendering is reserved for the future review screen and must respect the command output and escape dynamic values. The wizard is not implemented yet.
+Phase 5 uses Laravel Prompts for wizard questions. According to the [Laravel Prompts documentation](https://github.com/laravel/docs/blob/13.x/prompts.md), the rich interface supports macOS, Linux, and Windows through WSL. Native Windows receives Laravel's automatic Symfony Console fallback. Both modes must preserve defaults, validation, choices, and the review/edit/cancel workflow, although search and multiple-choice presentation differ. Custom [Termwind](https://github.com/nunomaduro/termwind) rendering is reserved for the review screen and must respect the command output and escape dynamic values. Use **Cancel** to exit review successfully.
 
-The `windows-sqlite` GitHub Actions job runs full `composer test` on native Windows with PHP 8.3 and SQLite, including selected-engine schema checks. Existing Linux framework and database matrix jobs remain in place. Wizard fallback acceptance tests will be added in Phase 5.
+The `windows-sqlite` GitHub Actions job runs full `composer test` on native Windows with PHP 8.3 and SQLite, including selected-engine schema checks. Existing Linux framework and database matrix jobs remain in place. Command tests exercise the fallback using scripted terminal input.
 
 ## Configuration
 
@@ -133,4 +133,4 @@ The package GitHub Actions `database-matrix` job provisions MySQL 8.4, PostgreSQ
 
 ## Phase 4 field services
 
-Field inference and validation are available as library services; see [field configuration](FIELD_CONFIGURATION.md) for APIs, supported mappings, canonical values, and customization requirements. The interactive wizard remains Phase 5. Full database-matrix runs cover validation queries on the selected engine. External test connections now enable `prefix_indexes` as well as per-test table prefixes so foreign-key names cannot collide with other tests or existing objects.
+Field inference and validation are available as library services; see [field configuration](FIELD_CONFIGURATION.md) for APIs, supported mappings, canonical values, and customization requirements. The interactive wizard uses these services. Full database-matrix runs cover validation queries on the selected engine. External test connections now enable `prefix_indexes` as well as per-test table prefixes so foreign-key names cannot collide with other tests or existing objects.

@@ -16,6 +16,7 @@
         "laravel/tinker": "^3.0",
         "livewire/blaze": "^1.0",
         "livewire/livewire": "^4.1",
+        "sirius/laravel-builder": "@dev",
         "sirius/ui": "0.1.0"
     },
     "require-dev": {
@@ -125,5 +126,12 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "name": "sirius-builder",
+            "type": "path",
+            "url": "../sirius-laravel-builder"
+        }
+    ]
 }

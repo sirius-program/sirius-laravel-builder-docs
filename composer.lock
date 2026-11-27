@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c27c5c5cffc56cdcfbd94393ea7e43d3",
+    "content-hash": "52ed188e1a94bfa7501ee58b6a9930c1",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -3732,6 +3732,124 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.10.0"
             },
             "time": "2026-11-14T23:23:20+00:00"
+        },
+        {
+            "name": "sirius/laravel-builder",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "../sirius-laravel-builder",
+                "reference": "89341e8eac77ad022e2483240b45b069a7668893"
+            },
+            "require": {
+                "illuminate/support": "^12.61.1 || ^13.12.0",
+                "laravel/prompts": "^0.3",
+                "nunomaduro/termwind": "^2.0",
+                "php": "^8.3",
+                "sirius/ui": "0.1.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.24",
+                "livewire/livewire": "^4.0",
+                "nikic/php-parser": "^5.0",
+                "orchestra/testbench": "^10.11 || ^11.0",
+                "peckphp/peck": "^0.3.0",
+                "pestphp/pest": "^3.8",
+                "phpstan/phpstan": "^2.0",
+                "rector/rector": "^2.8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Sirius\\LaravelBuilder\\SiriusLaravelBuilderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sirius\\LaravelBuilder\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tests\\": "tests/",
+                    "App\\": "tests/Fixtures/Application/app/"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "pint --parallel"
+                ],
+                "lint:check": [
+                    "pint --parallel --test"
+                ],
+                "ci:check": [
+                    "Composer\\Config::disableProcessTimeout",
+                    "@test"
+                ],
+                "types:check": [
+                    "phpstan analyse --memory-limit=2G"
+                ],
+                "typos:check": [
+                    "peck"
+                ],
+                "typos": [
+                    "peck --ignore-all"
+                ],
+                "refactor:check": [
+                    "rector --dry-run"
+                ],
+                "refactor": [
+                    "rector"
+                ],
+                "test": [
+                    "@php test.php"
+                ],
+                "check": [
+                    "@test"
+                ],
+                "post-autoload-dump": [
+                    "@composer run prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "test:database": [
+                    "@php vendor/bin/pest --configuration=phpunit.database.xml --compact"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sirius: Code",
+                    "role": "Author"
+                },
+                {
+                    "name": "Fathul Husnan",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "Action-based Livewire CRUD scaffolding for Laravel using Sirius UI.",
+            "homepage": "https://github.com/sirius-program/sirius-laravel-builder",
+            "keywords": [
+                "blade",
+                "components",
+                "laravel",
+                "livewire",
+                "tailwindcss"
+            ],
+            "support": {
+                "docs": "https://github.com/sirius-program/sirius-laravel-builder-docs#readme",
+                "issues": "https://github.com/sirius-program/sirius-laravel-builder/issues",
+                "source": "https://github.com/sirius-program/sirius-laravel-builder"
+            },
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "sirius/ui",
@@ -12411,7 +12529,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "sirius/laravel-builder": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

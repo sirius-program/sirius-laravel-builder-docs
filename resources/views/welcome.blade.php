@@ -8,7 +8,7 @@
                 <x-sirius::button as="a" :href="route('started.installation')" wire:navigate variant="primary" size="lg">Get started <span aria-hidden="true">→</span></x-sirius::button>
                 <x-sirius::button as="a" :href="route('started.architecture')" wire:navigate variant="outline" size="lg">Explore the architecture</x-sirius::button>
             </div>
-            <p class="availability-note">Available now: setup checks and configuration.<br>Interactive CRUD generation is planned, not yet available.</p>
+            <p class="availability-note">Available now: interactive resource planning and review.<br>CRUD file generation is not yet available.</p>
             <div class="stack-strip"><span>PHP 8.3+</span><i></i><span>Laravel 12 / 13</span><i></i><span>Livewire 4</span></div>
         </div>
         <div class="hero-visual">
@@ -37,7 +37,7 @@
         </div>
     </section>
     <section class="roadmap-section site-width">
-        <div><p class="eyebrow">THE ROAD AHEAD</p><h2>From model selection<br>to a resource of your own.</h2><p>The planned wizard will inspect your schema, configure fields and validation, then let you review every file before generation.</p></div>
+        <div><p class="eyebrow">THE ROAD AHEAD</p><h2>From model selection<br>to a resource of your own.</h2><p>Run the wizard to inspect your schema, configure fields and validation, and review the planned files and routes.</p></div>
         <div class="roadmap-details">
             <div><span>01</span><p><strong>Choose your model</strong><small>Discover nested models and inspect their schema.</small></p><x-sirius::badge variant="outline" size="sm">Planned</x-sirius::badge></div>
             <div><span>02</span><p><strong>Choose your experience</strong><small>Separate pages or dialogs on the index page.</small></p><x-sirius::badge variant="outline" size="sm">Planned</x-sirius::badge></div>

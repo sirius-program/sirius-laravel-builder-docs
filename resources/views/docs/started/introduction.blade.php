@@ -1,7 +1,7 @@
 <x-docs-layout title="Introduction" section="started.introduction"
     :navigation="[
         'available-today' => 'Available today',
-        'planned-workflow' => 'Planned resource workflow',
+        'planned-workflow' => 'Interactive resource workflow',
         'read-next' => 'Read next'
     ]"
 >
@@ -12,7 +12,7 @@
     />
 
     <p>Sirius Builder for Laravel is an evolving Laravel package for action-based Livewire CRUD, using Sirius UI.</p>
-    <x-sirius::message variant="info">Foundation milestone: command registration, configuration, and prerequisite checks are available. CRUD generation is not available yet.</x-sirius::message>
+    <x-sirius::message variant="info">Run <code>php artisan make:crud</code> to configure a resource and review its files and routes. File writing follows in a later milestone.</x-sirius::message>
     
     <h2 id="available-today" tabindex="-1">Available today</h2>
     <ul>
@@ -21,8 +21,8 @@
         <li>Architecture tests, isolated application fixtures, and Sirius UI integration.</li>
     </ul>
     
-    <h2 id="planned-workflow" tabindex="-1">Planned resource workflow</h2>
-    <p>Select an existing model, customize its resource and fields, choose a layout, and review the output. Index and detail views will always be included; mutations will be optional. Soft-deleting models will offer restore and permanent delete.</p>
+    <h2 id="planned-workflow" tabindex="-1">Interactive resource workflow</h2>
+    <p>Select an existing model, customize its resource and fields, choose a layout, and review the output. The wizard always includes Index and detail. Select the mutations to plan. Soft-deleting models also offer Restore and Permanent Delete. From review, edit a section, restart, or cancel.</p>
     <p>Generated output will include focused actions, Livewire classes, Blade views, named routes, and Pest tests. Publishable CRUD stubs and saved wizard configurations belong to later milestones.</p>
     
     <h2 id="read-next" tabindex="-1">Read next</h2>

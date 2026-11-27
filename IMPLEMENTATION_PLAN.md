@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–4 completed; Phases 5–14 not started.
+Status: Phases 0–5 implemented. Phases 6–14 have not started. See Phase 5 execution evidence for the legacy docs browser failures.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0, 1, 2, 3, and 4, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 through 5, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -330,20 +330,20 @@ Acceptance: every supported schema/field combination has a deterministic suggest
 
 ### Phase 5 — Interactive wizard and review
 
-- [ ] Use Laravel Prompts for all wizard questions, retaining Laravel's built-in Symfony Console fallback on native Windows. Rich Prompts support macOS, Linux, and Windows through WSL; native Windows uses simpler prompts. Keep the same answers, validation, defaults, and review/edit/cancel workflow in both modes. Search fallback may ask for a query before a numbered choice; multi-selection may use comma-separated choices.
-- [ ] Use Laravel's Termwind-backed console components for standard messages. Reserve custom Termwind markup for the review screen, bind it to the command output, escape dynamic content, and respect `--no-ansi` and output verbosity. Keep readable plain output when decoration is disabled.
-- [ ] Test the wizard's defaults, validation retries, search/select/multiselect answers, cancellation without writes, and plain output on the rich-prompt path and the native Windows fallback. Keep the Windows SQLite full-gate CI job alongside the Linux framework/database matrices. Do not treat existing preflight message tests as coverage of the future wizard.
-- [ ] Detect optional Diglactic Laravel Breadcrumbs integration and its configured route files without evaluating those files again; capture integration metadata in the resource definition. Cover absent package, absent route file, default/custom files, multiple files, and disabled configuration.
-- [ ] Select the sole safe existing breadcrumb file automatically; for multiple candidates require an explicit target in the wizard/configuration. Include planned trails, parent relationships, target file, and integration status in review; invalidate the preview after layout or route edits.
-- [ ] Implement the ordered prompt flow and searchable model/enum choices where appropriate. For each Password field, ask for its confirmation label after the main label/type, defaulting to `Confirm {label}`. Preserve custom labels during review edits; recompute the default when the main label changes if it was not customized.
-- [ ] Remove Read from the picker and always include Index/detail in the definition.
-- [ ] Add the resource-wide page/dialog choice and SoftDeletes-aware operation options.
-- [ ] Add route/authentication/policy configuration and missing-policy diagnostics.
-- [ ] Build a review screen showing exact files, route methods/paths/names, rules, source choices, conflicts, and manual requirements.
-- [ ] Implement Edit a section, Restart, Generate, and Cancel with dependent-answer invalidation.
-- [ ] Test default acceptance, customized answers, each review transition, cancellation, empty discoveries, and invalid entries through command tests.
-- [ ] Ensure the select branch asks only the agreed endpoint question and the enum branch derives its options without an endpoint prompt.
-- [ ] Add/update wizard documentation and READMEs; run `composer test` in both changed projects.
+- [x] Use Laravel Prompts for all wizard questions, retaining Laravel's built-in Symfony Console fallback on native Windows. Rich Prompts support macOS, Linux, and Windows through WSL; native Windows uses simpler prompts. Keep the same answers, validation, defaults, and review/edit/cancel workflow in both modes. Search fallback may ask for a query before a numbered choice; multi-selection may use comma-separated choices.
+- [x] Use Laravel's Termwind-backed console components for standard messages. Reserve custom Termwind markup for the review screen, bind it to the command output, escape dynamic content, and respect `--no-ansi` and output verbosity. Keep readable plain output when decoration is disabled.
+- [x] Test the wizard's defaults, validation retries, search/select/multiselect answers, cancellation without writes, and plain output on the rich-prompt path and the native Windows fallback. Keep the Windows SQLite full-gate CI job alongside the Linux framework/database matrices. Do not treat existing preflight message tests as coverage of the future wizard.
+- [x] Detect optional Diglactic Laravel Breadcrumbs integration and its configured route files without evaluating those files again; capture integration metadata in the resource definition. Cover absent package, absent route file, default/custom files, multiple files, and disabled configuration.
+- [x] Select the sole safe existing breadcrumb file automatically; for multiple candidates require an explicit target in the wizard/configuration. Include planned trails, parent relationships, target file, and integration status in review; invalidate the preview after layout or route edits.
+- [x] Implement the ordered prompt flow and searchable model/enum choices where appropriate. For each Password field, ask for its confirmation label after the main label/type, defaulting to `Confirm {label}`. Preserve custom labels during review edits; recompute the default when the main label changes if it was not customized.
+- [x] Remove Read from the picker and always include Index/detail in the definition.
+- [x] Add the resource-wide page/dialog choice and SoftDeletes-aware operation options.
+- [x] Add route/authentication/policy configuration and missing-policy diagnostics.
+- [x] Build a review screen showing exact files, route methods/paths/names, rules, source choices, conflicts, and manual requirements.
+- [x] Implement Edit a section, Restart, Generate, and Cancel with dependent-answer invalidation.
+- [x] Test default acceptance, customized answers, each review transition, cancellation, empty discoveries, and invalid entries through command tests.
+- [x] Ensure the select branch asks only the agreed endpoint question and the enum branch derives its options without an endpoint prompt.
+- [x] Add/update wizard documentation and READMEs; run `composer test` in both changed projects.
 
 Acceptance: developers can complete, inspect, revise, or cancel a resource configuration without any application-file writes before final generation.
 
@@ -677,3 +677,11 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Migrated existing preflight success/warning/error messages to Laravel's Termwind-backed console components. Added behavioral tests for undecorated output, literal dynamic markup, and quiet mode. Custom review rendering and wizard interaction tests remain unchecked Phase 5 work.
 - Added a native Windows PHP 8.3 SQLite job running full `composer test`, including SQLite schema acceptance, alongside the existing Linux framework and full database matrices. No dependency or environment-file changes were needed.
 - Architecture prerequisite passed (5 tests / 59 assertions). Local native Windows PHP 8.3 full package gate passed: 200 tests / 537 assertions plus SQLite 1 schema test / 19 assertions. Docs full gate passed: 29 tests / 36 assertions. Pint, PHPStan, and Rector passed in both projects. No UI changes required browser/build reruns. GitHub-hosted execution remains unverified; this revision does not mark Phase 5 complete.
+
+
+### Phase 5 — November 27, 2026
+
+- Implemented the interactive command, model-specific schema inspection, editable field mappings and validation, page/dialog and operation selection, policy diagnostics, optional browser test planning, and optional Diglactic breadcrumb detection. Review recalculates the proposed files, routes, and trails. Generate reports the pending writer milestone. Cancel exits successfully.
+- Added [the wizard guide](WIZARD.md), updated the public introduction and installation pages, and retained the preflight-only entry point. No application resource files are written by the wizard.
+- Native Windows PHP 8.3 passed full Composer tests on SQLite, MySQL, MariaDB, and PostgreSQL (212 passed, 600 assertions per driver). Additional schema suites passed with 19, 24, 24, and 27 assertions respectively. The rich keyboard test is skipped on native Windows and passed in WSL as part of the complete 13-test wizard suite (75 assertions).
+- Documentation passed Composer tests (29 tests, 36 assertions), the frontend build, and a new browser test navigating from the homepage to the wizard instructions (4 assertions). The pre-existing ten documentation browser tests failed during verification. They include expectations for obsolete URLs such as /docs/getting-started. The current installation route is /getting-started/installation. The full documentation browser suite is still red.
