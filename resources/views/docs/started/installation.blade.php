@@ -13,7 +13,7 @@
         lead="A ready foundation for you to build you own Laravel app.">
     </x-header>
     
-    <p>Try the prerequisite checks in a compatible Laravel application. The development package does not generate CRUD files yet.</p>
+    <p>Try the prerequisite checks in a compatible Laravel application. The wizard can write resource scaffolds after review.</p>
 
     <h2 id="requirements" tabindex="-1">Requirements</h2>
     <ul>
@@ -31,7 +31,7 @@
     <h2 id="check-application" tabindex="-1">Check your application</h2>
     @include('partials.code.make-crud-check')
     <p>A successful check returns exit code 0. Invalid paths, missing dependencies, or an unavailable connection return exit code 1 with a diagnostic. The check connects to the default database without querying records. The interactive wizard then inspects the selected model on its own connection.</p>
-    <p>Running <code>make:crud</code> without <code>--check</code> opens the interactive resource wizard. Review the planned files, routes, validation, and breadcrumbs. Choose Cancel to exit successfully.</p>
+    <p>Running <code>make:crud</code> without <code>--check</code> opens the interactive resource wizard. Review the planned files, routes, validation, and breadcrumbs. Choose Generate to apply the plan, or Cancel to exit. Use <code>php artisan make:crud --dry-run</code> to preview the same plan without applying it.</p>
     
     <h2 id="publish-configuration" tabindex="-1">Publish configuration</h2>
     @include('partials.code.publish-config')

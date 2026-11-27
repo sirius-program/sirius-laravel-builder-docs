@@ -14,5 +14,9 @@ test('documentation pages are public and render Sirius UI', function (string $pa
 ]);
 
 test('the homepage distinguishes available checks from planned generation', function (): void {
-    $this->get('/')->assertOk()->assertSee('make:crud --check')->assertSee('not yet available')->assertSee('Planned');
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('make:crud --check')
+        ->assertSee('Generate Livewire scaffolds')
+        ->assertSee('Available');
 });

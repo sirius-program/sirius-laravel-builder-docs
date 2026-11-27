@@ -16,7 +16,7 @@ For example, wrap the content of **view.stub** in an article:
 </article>
 ~~~
 
-The interactive wizard previews the plan. File writing and route insertion follow in Phase 7. Publishing writes only the template files.
+The interactive wizard previews the plan. Generate applies the reviewed templates and route registrations. See [generation and recovery](GENERATION.md). Publishing writes only the template files.
 
 ## Template contract (version 1)
 

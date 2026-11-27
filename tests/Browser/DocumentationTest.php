@@ -10,13 +10,13 @@ beforeEach(function (): void {
 
 it('navigates public documentation without authentication', function (): void {
     $page = visit('/')->resize(1440, 1000);
-    $page->assertSee('Your models.')->assertSee('not yet available')
+    $page->assertSee('Your models.')->assertSee('Generate Livewire scaffolds')
         ->assertNotPresent('a[href$="/login"]')->assertNotPresent('a[href$="/register"]')
         ->assertNoJavaScriptErrors()
         ->screenshot(filename: 'phase-1-home-light');
 
-    $page->click('a[href$="/docs/getting-started"]')->assertPathIs('/docs/getting-started')->assertSee('A ready foundation.')
-        ->click('Architecture')->assertPathIs('/docs/architecture')->assertSee('Clear responsibilities.')
+    $page->click('a[href$="/getting-started/installation"]')->assertPathIs('/getting-started/installation')->assertSee('make:crud --dry-run')
+        ->click('aside a[href$="/getting-started/architecture"]')->assertPathIs('/getting-started/architecture')->assertSee('Executable boundaries')
         ->assertNoJavaScriptErrors();
 });
 

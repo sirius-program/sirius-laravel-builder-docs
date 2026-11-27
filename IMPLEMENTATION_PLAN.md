@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–6 implemented. Phases 7–14 have not started. See Phase 5 execution evidence for the legacy docs browser failures.
+Status: Phases 0–7 implemented. Phases 8–14 have not started. See Phase 5 execution evidence for the legacy docs browser failures.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 through 6, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 through 7, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -368,17 +368,17 @@ Acceptance: a published override changes generated output, and every generated f
 
 ### Phase 7 — Artifact writing and route integration
 
-- [ ] Build an artifact manifest with intended paths, content, managed route blocks, and conflicts.
-- [ ] Stage and syntax-check generated artifacts before applying them.
-- [ ] Insert/update managed `web.php` blocks while preserving unrelated imports, code, and routes.
-- [ ] Automatically add/update breadcrumb registrations when the reviewed integration is available, following the optional breadcrumb contract below. Preserve unrelated definitions/imports, detect existing names, and include breadcrumb files in the same staging, syntax validation, conflict review, file-state recheck, and rollback as all generated artifacts.
-- [ ] Test breadcrumb integration with the real Diglactic package in an isolated fixture: default/custom/multiple files, page/dialog layouts, repeated generation, existing-name conflicts, dry run/cancel, concurrent edits, unsafe paths, parse failures, and rollback. Verify registered trails and parameters resolve correctly.
-- [ ] Detect existing route-name/path collisions, duplicate generation, and static/dynamic route ordering problems.
-- [ ] Require explicit per-file overwrite choices; fail noninteractive conflicts unless exact overwrite targets were supplied.
-- [ ] Implement path containment, safe escaping, file-state rechecks, backups, and recoverable rollback.
-- [ ] Implement a write-free dry-run path shared by interactive review and later configuration import.
-- [ ] Test cancellation, collision, partial-write failure, route parse failure, concurrent edits, Windows paths, and recovery diagnostics.
-- [ ] Add/update route, overwrite, and recovery documentation and READMEs; run `composer test` in both changed projects.
+- [x] Build an artifact manifest with intended paths, content, managed route blocks, and conflicts.
+- [x] Stage and syntax-check generated artifacts before applying them.
+- [x] Insert/update managed `web.php` blocks while preserving unrelated imports, code, and routes.
+- [x] Automatically add/update breadcrumb registrations when the reviewed integration is available, following the optional breadcrumb contract below. Preserve unrelated definitions/imports, detect existing names, and include breadcrumb files in the same staging, syntax validation, conflict review, file-state recheck, and rollback as all generated artifacts.
+- [x] Test breadcrumb integration with the real Diglactic package in an isolated fixture: default/custom/multiple files, page/dialog layouts, repeated generation, existing-name conflicts, dry run/cancel, concurrent edits, unsafe paths, parse failures, and rollback. Verify registered trails and parameters resolve correctly.
+- [x] Detect existing route-name/path collisions, duplicate generation, and static/dynamic route ordering problems.
+- [x] Require explicit per-file overwrite choices; fail noninteractive conflicts unless exact overwrite targets were supplied.
+- [x] Implement path containment, safe escaping, file-state rechecks, backups, and recoverable rollback.
+- [x] Implement a write-free dry-run path shared by interactive review and later configuration import.
+- [x] Test cancellation, collision, partial-write failure, route parse failure, concurrent edits, Windows paths, and recovery diagnostics.
+- [x] Add/update route, overwrite, and recovery documentation and READMEs; run `composer test` in both changed projects.
 
 Acceptance: valid output loads in a fixture application, repeated runs do not duplicate routes, and recoverable failures restore original files.
 
@@ -691,3 +691,10 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Shipped six overridable templates with the sirius-builder-stubs tag. Each override resolves independently. Publication, repeat publication, literal user input, placeholder validation, and PHP syntax checks are covered in isolated application tests. See [the stub guide](STUBS.md).
 - The Livewire browser fixture mounted all supported field types and the password confirmation. It exercised validation feedback, canonical decimal submission, reset, and a second submission. Email and URL use the supported Sirius text input with matching inputmode.
 - The architecture prerequisite passed (5 tests, 64 assertions). On native Windows the PHP 8.3 SQLite package gate passed (233 tests, 691 assertions, one rich-terminal test skipped). The docs gate passed (29 tests, 36 assertions), assets built successfully, and both affected Chromium tests passed (23 assertions). The unrelated legacy browser suite was not rerun during this phase.
+
+### Phase 7 — File writing and route integration (November 28, 2026)
+
+- Review, dry run, and Generate use the same artifact manifest. Generation stages scaffolds, validates PHP and compiled Blade, checks reviewed contents, and applies per-file overwrite decisions. Recoverable replacement failures restore original contents. The wizard reports retained backups if restoration needs manual intervention.
+- Verified HTTP access to generated Index pages for both layouts in an isolated application. Integration tests with Diglactic 10.1 cover registered trails, record parameters, route order, collisions, and repeat generation. Focused tests also cover unchanged dry runs, cancelled overwrites, concurrent edits, unsafe paths, edited managed blocks, and rollback after a later write fails. See [file generation and recovery](GENERATION.md).
+- On native Windows with PHP 8.3, full package Composer gates passed independently on SQLite, MySQL, MariaDB, and PostgreSQL. Each ran 246 tests with 784 assertions and skipped the rich-terminal test. Additional schema tests passed on each selected engine (SQLite 1/19, MySQL 3/24, MariaDB 3/24, PostgreSQL 3/27). On WSL the wizard and artifact-writing suites passed together (26 tests, 163 assertions).
+- The docs Composer gate passed (29 tests, 36 assertions), frontend assets built, and both affected Chromium navigation tests passed (14 assertions). The entire legacy browser suite and hosted CI were not run for this phase. Generated mutation actions are scaffolds pending Phase 8.

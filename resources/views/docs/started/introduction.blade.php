@@ -12,7 +12,7 @@
     />
 
     <p>Sirius Builder for Laravel is an evolving Laravel package for action-based Livewire CRUD, using Sirius UI.</p>
-    <x-sirius::message variant="info">Run <code>php artisan make:crud</code> to configure a resource and review its files and routes. File writing follows in a later milestone.</x-sirius::message>
+    <x-sirius::message variant="info">Run <code>php artisan make:crud</code> to configure a resource and review its files and routes. Choose Generate to write the reviewed scaffolds.</x-sirius::message>
     
     <h2 id="available-today" tabindex="-1">Available today</h2>
     <ul>
@@ -23,7 +23,7 @@
     
     <h2 id="planned-workflow" tabindex="-1">Interactive resource workflow</h2>
     <p>Select an existing model, customize its resource and fields, choose a layout, and review the output. The wizard always includes Index and detail. Select the mutations to plan. Soft-deleting models also offer Restore and Permanent Delete. From review, edit a section, restart, or cancel.</p>
-    <p>Generated output will include focused actions, Livewire classes, Blade views, named routes, and Pest tests. You can publish and customize the CRUD stubs now. Saved wizard configurations belong to a later milestone.</p>
+    <p>Generated output includes focused actions, Livewire classes, Blade views, named routes, and Pest tests. You can publish and customize the CRUD stubs now. Saved wizard configurations belong to a later milestone.</p>
     
     <h2 id="read-next" tabindex="-1">Read next</h2>
     <div class="doc-next">

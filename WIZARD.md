@@ -7,7 +7,7 @@ Run `php artisan make:crud` in an interactive terminal inside your Laravel appli
 3. Accept or edit shared, Create, and Update validation rules using pipes. The wizard retains structured constraints such as uniqueness and foreign keys.
 4. Choose pages or dialogs, then select write operations. Index and detail are always available. Page mode previews separate GET routes. Dialog mode previews one Index URL. Soft-deleting models additionally offer restore and permanent delete.
 5. Review the URL and route-name prefixes, authentication, policy, optional policy scaffold, and browser tests. When Diglactic has several existing breadcrumb files, choose the target. The review shows planned trails and their parents.
-6. Inspect the proposed routes, files, conflicts, and fields. **Edit a section** revisits an answer group. **Restart** returns to model selection. **Cancel** exits successfully. **Generate** reports that file writing belongs to a later phase and exits with a failure status. Answers exist only for the current session.
+6. Inspect the proposed routes, files, conflicts, and fields. **Edit a section** revisits an answer group. **Restart** returns to model selection. **Cancel** exits successfully. **Generate** applies the reviewed files and routes. Use **php artisan make:crud --dry-run** to preview only. See [file generation and recovery](GENERATION.md). Answers exist only for the current session.
 
 On native Windows, the Laravel Prompts fallback presents choices through Symfony Console. Enter multiple choices as a comma-separated list. Use WSL for the rich keyboard interface. Add `--no-ansi` for plain output.
 
