@@ -384,15 +384,15 @@ Acceptance: valid output loads in a fixture application, repeated runs do not du
 
 ### Phase 8 — Generated actions, policies, and persistence
 
-- [ ] Generate separate Create, Update, Delete, Restore, and Permanent Delete actions only when selected.
-- [ ] Authorize and validate within each public action entry point; explicitly assign only the selected validated fields.
-- [ ] Implement cast-aware password hashing, blank-password Update behavior, JSON conversion, decimal preservation, and richtext sanitization.
-- [ ] Respect model connection, key type, global scopes, casts, events, and transaction boundaries.
-- [ ] Generate missing policies only when chosen, with deny-by-default methods and clear customization notes.
-- [ ] Preserve existing policies/models/factories; report incompatible assumptions and fixture requirements.
-- [ ] Test direct action calls, unauthorized attempts, invalid data, unexpected payload keys, omitted operations, and each soft-delete state transition.
-- [ ] Verify sanitizer behavior against unsafe HTML and verify password hashes never enter read payloads.
-- [ ] Add/update actions, policies, security, and model integration documentation and READMEs; run `composer test` in both changed projects.
+- [x] Generate separate Create, Update, Delete, Restore, and Permanent Delete actions only when selected.
+- [x] Authorize and validate within each public action entry point; explicitly assign only the selected validated fields.
+- [x] Implement cast-aware password hashing, blank-password Update behavior, JSON conversion, decimal preservation, and richtext sanitization.
+- [x] Respect model connection, key type, global scopes, casts, events, and transaction boundaries.
+- [x] Generate missing policies only when chosen, with deny-by-default methods and clear customization notes.
+- [x] Preserve existing policies/models/factories; report incompatible assumptions and fixture requirements.
+- [x] Test direct action calls, unauthorized attempts, invalid data, unexpected payload keys, omitted operations, and each soft-delete state transition.
+- [x] Verify sanitizer behavior against unsafe HTML and verify password hashes never enter read payloads.
+- [x] Add/update actions, policies, security, and model integration documentation and READMEs; run `composer test` in both changed projects.
 
 Acceptance: selected actions persist correct values on the intended connection; invalid or unauthorized invocations leave records unchanged.
 
@@ -698,3 +698,10 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Verified HTTP access to generated Index pages for both layouts in an isolated application. Integration tests with Diglactic 10.1 cover registered trails, record parameters, route order, collisions, and repeat generation. Focused tests also cover unchanged dry runs, cancelled overwrites, concurrent edits, unsafe paths, edited managed blocks, and rollback after a later write fails. See [file generation and recovery](GENERATION.md).
 - On native Windows with PHP 8.3, full package Composer gates passed independently on SQLite, MySQL, MariaDB, and PostgreSQL. Each ran 246 tests with 784 assertions and skipped the rich-terminal test. Additional schema tests passed on each selected engine (SQLite 1/19, MySQL 3/24, MariaDB 3/24, PostgreSQL 3/27). On WSL the wizard and artifact-writing suites passed together (26 tests, 163 assertions).
 - The docs Composer gate passed (29 tests, 36 assertions), frontend assets built, and both affected Chromium navigation tests passed (14 assertions). The entire legacy browser suite and hosted CI were not run for this phase. Generated mutation actions are scaffolds pending Phase 8.
+
+### Phase 8 — Generated actions and persistence (November 28, 2026)
+
+- Generated actions resolve scoped primary keys on the model connection, authorize the selected operation, validate and normalize writable fields, and commit through Eloquent. Generated policies deny each ability until the developer implements it. See [generated actions and policies](ACTIONS.md).
+- Direct calls to actual generated files in Testbench exercised UUID keys, an unavailable default connection, global scopes, policy denial, confirmation, Update uniqueness, extra input, JSON objects, decimal strings, richtext, soft-delete transitions and rollback after an observer exception. Additional checks covered plain passwords, hashing mutators and an incompatible setter. The read projection excludes passwords and sanitizes stored richtext.
+- On Windows, PHP 8.3.35 and Laravel 13.43.0, `composer test` passed separately for SQLite, MySQL, MariaDB and PostgreSQL. Each selection ran 248 passing tests with 830 assertions. The native Windows suite skips one rich-terminal prompt test. Additional selected-engine schema checks passed on SQLite (1 test, 19 assertions), MySQL (3, 24), MariaDB (3, 24) and PostgreSQL (3, 27).
+- Docs `composer test` passed with 29 tests and 36 assertions. Updated both READMEs, generation and stub documentation, and the docs dependency lock. Browser screens for interacting with records belong to Phases 9 and 10.

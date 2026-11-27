@@ -25,6 +25,7 @@ Use the exact placeholders below, including the surrounding **%{** and **}%**. E
 | File | Placeholders and context |
 | --- | --- |
 | action.stub | namespace and class are PHP identifiers. parameters is the method parameter list, return_type the PHP return type, and body the handle method statements. |
+| policy.stub | namespace and class identify the missing policy. methods contains the reviewed abilities with deny-by-default implementations. |
 | livewire.stub | namespace and class identify the component. members contains its PHP members. view is the quoted PHP expression for the view name. |
 | view.stub | content is rendered Blade markup inside the root element. |
 | pest.stub | description is a quoted PHP string and body contains Pest assertions. |

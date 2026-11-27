@@ -8,7 +8,7 @@ php artisan make:crud --dry-run
 
 Review the proposed GET routes, breadcrumb trails, and each file marked Create, Update, or Unchanged. Choose **Generate** to finish the dry run, or **Cancel** to exit. To apply the plan, run **php artisan make:crud** interactively and choose **Generate** after review. Both modes build the same manifest using your published stub overrides.
 
-Generation writes Livewire pages, Blade views, action scaffolds, a table subclass, a Pest feature test, and the approved route changes. The wizard can also scaffold a deny-by-default policy and a browser test. Pages use the host application's configured Livewire page layout. Page mode includes Index and detail, with Create/Edit routes for the selected operations. Dialog mode registers Index only. The Phase 7 table returns an empty collection. The generated action entry points fail explicitly until persistence is implemented. Dialog interaction and fully functional CRUD screens follow in later phases.
+Generation writes Livewire pages, Blade views, selected mutation actions, a table subclass, a Pest feature test, and the approved route changes. The wizard can also scaffold a deny-by-default policy and a browser test. Pages use the host application's configured Livewire page layout. Page mode includes Index and detail, with Create/Edit routes for the selected operations. Dialog mode registers Index only. The Phase 7 table returns an empty collection. The generated actions can be invoked directly after configuring access. See [actions and policies](ACTIONS.md). Dialog interaction and fully functional CRUD screens follow in later phases.
 
 ## Repeated runs and conflicts
 
