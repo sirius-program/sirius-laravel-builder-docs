@@ -35,13 +35,13 @@ The publishing tag writes `config/sirius-builder.php`. Re-publishing preserves a
 | --- | --- | --- |
 | `paths.models` | `app/Models` | Must be an existing directory |
 | `paths.enums` | `app/Enums` | May be absent; must be a directory if present |
-| `paths.stubs` | `stubs/sirius-builder` | Reserved for Phase 6; may be absent |
+| `paths.stubs` | `stubs/sirius-builder` | Per-template application overrides; optional |
 | `paths.routes` | `routes/web.php` | Must be an existing readable/writable file |
 | `routes.prefix` | empty string | Reserved route default |
 | `routes.name_prefix` | empty string | Reserved route-name default |
 | `routes.middleware` | `['auth']` | Reserved consumer authentication default |
 
-Paths must be nonempty and relative to the application root, without parent traversal. Route defaults do not add routes yet. Publishable **stubs** remain a Phase 6 deliverable; Phase 1 publishes configuration only.
+Paths must be nonempty and relative to the application root, without parent traversal. Route defaults do not add routes yet. See [stub customization](STUBS.md) for the dedicated publish command and placeholder reference.
 
 ## Sirius UI and skills
 

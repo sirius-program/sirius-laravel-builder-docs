@@ -1,12 +1,12 @@
 # Sirius Builder for Laravel — Phased Implementation Plan
 
-Status: Phases 0–5 implemented. Phases 6–14 have not started. See Phase 5 execution evidence for the legacy docs browser failures.
+Status: Phases 0–6 implemented. Phases 7–14 have not started. See Phase 5 execution evidence for the legacy docs browser failures.
 
 Decision date: November 20, 2026.
 
 Documentation scope revised: November 21, 2026 — use Sirius UI's palette and theme, remove documentation-app authentication, and build a public package-introduction homepage. This supersedes the earlier decision to retain docs login and require authenticated demonstrations. It does not change authentication/policy defaults in generated consumer applications.
 
-This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 through 5, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
+This plan records the requirements and recommendations accepted during the design interview. The owner subsequently authorized Phases 0 through 6, whose completed checkboxes and evidence appear below. Later phases require an instruction to proceed; completion of a phase does not authorize the next automatically.
 
 ## 1. Outcome and project boundaries
 
@@ -351,18 +351,18 @@ Acceptance: developers can complete, inspect, revise, or cancel a resource confi
 
 #### 6.1 Template infrastructure
 
-- [ ] Implement shipped templates, deterministic rendering, and per-template app overrides. Include the optional breadcrumb registration stub in publishing, override precedence, and placeholder documentation.
-- [ ] Publish stubs under the dedicated tag and document placeholders and customization boundaries.
-- [ ] Test override precedence, missing placeholders, invalid templates, repeated publishing, and preservation of customized files.
+- [x] Implement shipped templates, deterministic rendering, and per-template app overrides. Include the optional breadcrumb registration stub in publishing, override precedence, and placeholder documentation.
+- [x] Publish stubs under the dedicated tag and document placeholders and customization boundaries.
+- [x] Test override precedence, missing placeholders, invalid templates, repeated publishing, and preservation of customized files.
 
 #### 6.2 Sirius field templates
 
-- [ ] Render supported Sirius inputs, textarea, richtext, select, boolean, currency, phone, and date/time controls.
-- [ ] Render password confirmation with the agreed label and no stored-value disclosure.
-- [ ] Use stable IDs, labels, error associations, and Livewire bindings; honor configured Sirius namespaces.
-- [ ] Render enum options as record lists and omit blank select endpoints.
-- [ ] Verify canonical values, reset behavior, validation feedback, and widget lifecycle in browser fixture screens.
-- [ ] Add/update stub customization and field examples and READMEs; run both projects' `composer test` and relevant browser tests.
+- [x] Render supported Sirius inputs, textarea, richtext, select, boolean, currency, phone, and date/time controls.
+- [x] Render password confirmation with the agreed label and no stored-value disclosure.
+- [x] Use stable IDs, labels, error associations, and Livewire bindings; honor configured Sirius namespaces.
+- [x] Render enum options as record lists and omit blank select endpoints.
+- [x] Verify canonical values, reset behavior, validation feedback, and widget lifecycle in browser fixture screens.
+- [x] Add/update stub customization and field examples and READMEs; run both projects' `composer test` and relevant browser tests.
 
 Acceptance: a published override changes generated output, and every generated field type works in a real Livewire fixture screen.
 
@@ -685,3 +685,9 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Added [the wizard guide](WIZARD.md), updated the public introduction and installation pages, and retained the preflight-only entry point. No application resource files are written by the wizard.
 - Native Windows PHP 8.3 passed full Composer tests on SQLite, MySQL, MariaDB, and PostgreSQL (212 passed, 600 assertions per driver). Additional schema suites passed with 19, 24, 24, and 27 assertions respectively. The rich keyboard test is skipped on native Windows and passed in WSL as part of the complete 13-test wizard suite (75 assertions).
 - Documentation passed Composer tests (29 tests, 36 assertions), the frontend build, and a new browser test navigating from the homepage to the wizard instructions (4 assertions). The pre-existing ten documentation browser tests failed during verification. They include expectations for obsolete URLs such as /docs/getting-started. The current installation route is /getting-started/installation. The full documentation browser suite is still red.
+
+### Phase 6 — Publishable templates and Sirius controls
+
+- Shipped six overridable templates with the sirius-builder-stubs tag. Each override resolves independently. Publication, repeat publication, literal user input, placeholder validation, and PHP syntax checks are covered in isolated application tests. See [the stub guide](STUBS.md).
+- The Livewire browser fixture mounted all supported field types and the password confirmation. It exercised validation feedback, canonical decimal submission, reset, and a second submission. Email and URL use the supported Sirius text input with matching inputmode.
+- The architecture prerequisite passed (5 tests, 64 assertions). On native Windows the PHP 8.3 SQLite package gate passed (233 tests, 691 assertions, one rich-terminal test skipped). The docs gate passed (29 tests, 36 assertions), assets built successfully, and both affected Chromium tests passed (23 assertions). The unrelated legacy browser suite was not rerun during this phase.

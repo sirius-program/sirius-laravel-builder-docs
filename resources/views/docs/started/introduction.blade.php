@@ -23,7 +23,7 @@
     
     <h2 id="planned-workflow" tabindex="-1">Interactive resource workflow</h2>
     <p>Select an existing model, customize its resource and fields, choose a layout, and review the output. The wizard always includes Index and detail. Select the mutations to plan. Soft-deleting models also offer Restore and Permanent Delete. From review, edit a section, restart, or cancel.</p>
-    <p>Generated output will include focused actions, Livewire classes, Blade views, named routes, and Pest tests. Publishable CRUD stubs and saved wizard configurations belong to later milestones.</p>
+    <p>Generated output will include focused actions, Livewire classes, Blade views, named routes, and Pest tests. You can publish and customize the CRUD stubs now. Saved wizard configurations belong to a later milestone.</p>
     
     <h2 id="read-next" tabindex="-1">Read next</h2>
     <div class="doc-next">

@@ -37,6 +37,8 @@
     @include('partials.code.publish-config')
     <p>Edit <code>config/sirius-builder.php</code>. Paths are relative to the application root. Defaults are <code>app/Models</code>, <code>app/Enums</code>, <code>stubs/sirius-builder</code>, and <code>routes/web.php</code>. Enum and stub directories are optional at this stage. Re-publishing preserves your configuration unless you explicitly use <code>--force</code>.</p>
 
+    <p>To customize the generator templates, run <code>php artisan vendor:publish --tag=sirius-builder-stubs</code>. Edit the individual templates under <code>stubs/sirius-builder</code>. Publishing again preserves existing files unless you pass <code>--force</code>.</p>
+
     <h2 id="asset-setup" tabindex="-1">Asset setup</h2>
     <p>With Vite, import <code>vendor/sirius/ui/dist/sirius.css</code> into your app CSS and <code>vendor/sirius/ui/dist/sirius.js</code> into your app JavaScript using paths relative to those files. Load Livewire assets once and run your frontend build.</p>
 
