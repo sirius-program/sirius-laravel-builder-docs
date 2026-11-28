@@ -1,6 +1,6 @@
 # Sirius Builder for Laravel Documentation
 
-- [Call generated actions and configure policies](ACTIONS.md)
+- [Call generated actions and customize Livewire validation, messages and policies](ACTIONS.md)
 - [Generate files, resolve conflicts, and recover](GENERATION.md)
 - [Publish and customize generation stubs](STUBS.md)
 - [CSS formatting rules](CSS_STYLE.md)

@@ -21,3 +21,9 @@ A collision with another registered route or trail blocks the write. Use a disti
 Builder validates PHP and compiled Blade in memory, stages changed files beside their destinations, and saves original bytes before replacing them. It rechecks the reviewed contents and confines output to the application root. A second generator targeting the same project must wait for the current run to finish. If files change after review, restart and inspect the new plan.
 
 On a recoverable failure, Builder restores replaced files in reverse order and removes newly written files. If rollback encounters another edit or a filesystem error, the message identifies the affected path and retained backup. Stop other writers, compare the current file and backup, copy back the desired version, then rerun the dry run. For a newly created file without an original, remove it only after confirming it contains no independent changes. Multiple files are replaced individually; recovery after a process or machine crash may require comparing the working tree and adjacent staging files with version control.
+
+## Test files
+
+A User resource generates `tests/Feature/Crud/UserTest.php` in `Tests\Feature\Crud`. Selecting browser tests also generates `tests/Browser/Crud/UserTest.php` in `Tests\Browser\Crud`. Nested resource names retain their parent namespaces.
+
+In `config/sirius-builder.php`, set `'tests' => ['namespace' => 'Resources']` to replace `Crud` for both suites. Existing published config files default to `Crud`. Regeneration creates files at the new paths. Review earlier generated test files for duplicate coverage before removing them.

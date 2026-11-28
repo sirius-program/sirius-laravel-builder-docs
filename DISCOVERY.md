@@ -71,7 +71,7 @@ For a selected `App\Models\Admin\Category`:
 | Action namespace | `App\Actions\Admin\Category` |
 | View directory | `resources/views/livewire/admin/category` |
 | View name | `livewire.admin.category` |
-| Feature test directory | `tests/Feature/Crud/Admin/Category` |
+| Feature test file | `tests/Feature/Crud/Admin/CategoryTest.php` |
 | URL prefix | `/admin/categories` |
 | Route name prefix | `admin.categories.` |
 | Middleware | `['auth']` |

@@ -99,7 +99,7 @@ Example for `App\Models\Admin\Category`:
 | Livewire classes | `App\Livewire\Admin\Category` |
 | Write actions | `App\Actions\Admin\Category` |
 | Blade views | `resources/views/livewire/admin/category` |
-| Feature tests | `tests/Feature/Crud/Admin/Category` |
+| Feature tests | `tests/Feature/Crud/Admin/CategoryTest.php` |
 | URL prefix | `/admin/categories` |
 | Route-name prefix | `admin.categories.` |
 
@@ -147,7 +147,7 @@ Cancellation and validation failures leave application files unchanged. No datab
 
 ### Column inclusion, labels, and type precedence
 
-Ask whether to include each column. Default to true except for `id`, names ending in `_at`, or database timestamp types, which default to false. Skipped columns receive no further field questions. Database-generated columns cannot become writable even when included for display.
+Ask whether to include each supported column. When Eloquent’s `isFillable()` returns false, append `(Not mass assignable)` to the inclusion question, including during edits. List selected guarded columns under Warnings & conflicts in the review. The consuming application owns mass-assignment configuration and runtime enforcement. Default to true except for `id`, names ending in `_at`, or database timestamp types, which default to false. Skipped columns receive no further field questions. Database-generated columns cannot become writable even when included for display.
 
 For each included field, ask for its label, defaulting to the title case of the column name. Apply `_id` matching before generic integer/string mappings, while preserving genuine enum/date and database-generated metadata. Normalize driver type aliases before matching.
 
@@ -177,7 +177,7 @@ No silent lossy mapping is acceptable. If metadata cannot identify a database en
 - **Richtext:** use Sirius Richtext and a maintained server-side HTML sanitizer with an explicit allowlist. Sanitize before persistence and before rendering legacy/untrusted stored HTML. Omit image/upload controls in version one.
 - **Currency:** preserve canonical decimal strings and schema precision/scale; do not convert money to floating-point values.
 - **Date/time:** use Sirius canonical formats and explicitly document the application timezone conversion policy. Do not silently treat local datetime strings as UTC.
-- **Phone:** use Sirius canonical phone values and applicable server validation, not client formatting alone.
+- **Phone:** generate the Sirius phone component and apply `Sirius\Ui\Rules\PhoneNumber` to both Create and Update. Preserve the canonical international string.
 - **JSON:** serialize/decode according to the existing model cast; prevent double encoding and expose invalid input as validation errors.
 
 ### Validation contract
@@ -394,6 +394,10 @@ Acceptance: valid output loads in a fixture application, repeated runs do not du
 - [x] Verify sanitizer behavior against unsafe HTML and verify password hashes never enter read payloads.
 - [x] Add/update actions, policies, security, and model integration documentation and READMEs; run `composer test` in both changed projects.
 
+- [x] Keep schema and field definitions inside discovery, inference and generation. Generate explicit Eloquent attribute mappings and instance mutations using only fields offered and selected during the wizard.
+- [x] Generate `App\Validation\{Resource}Validation` (for example, `UserValidation` or `Admin\CategoryValidation`) and share its Laravel rules, attribute labels and messages between Livewire validation and direct action calls. Prefix Livewire errors with `form.` and ignore only the scoped record during Update uniqueness checks.
+- [x] Wrap database failures after transaction rollback, retain their cause, and preserve Laravel validation, authorization and missing-record exceptions.
+
 Acceptance: selected actions persist correct values on the intended connection; invalid or unauthorized invocations leave records unchanged.
 
 ### Phase 9 — Mandatory Index and Read output
@@ -411,6 +415,8 @@ Acceptance: selected actions persist correct values on the intended connection; 
 Acceptance: Index and Read work in both layouts with no selected mutations and do not expose unauthorized or sensitive data.
 
 ### Phase 10 — Create/Update pages and Index dialogs
+
+- [ ] Call the generated Livewire validation hooks before submitting each form and display field-level messages in both layouts. Default built-in rule messages to Laravel’s active validation translations and keep resource-specific overrides optional.
 
 - [ ] Generate separate Create/Edit components and views in page mode for selected operations.
 - [ ] Generate Create/Edit dialogs hosted by Index in dialog mode, reusing agreed form definitions and actions.
@@ -705,3 +711,9 @@ Planning-only verification belongs in a separate note below; it does not complet
 - Direct calls to actual generated files in Testbench exercised UUID keys, an unavailable default connection, global scopes, policy denial, confirmation, Update uniqueness, extra input, JSON objects, decimal strings, richtext, soft-delete transitions and rollback after an observer exception. Additional checks covered plain passwords, hashing mutators and an incompatible setter. The read projection excludes passwords and sanitizes stored richtext.
 - On Windows, PHP 8.3.35 and Laravel 13.43.0, `composer test` passed separately for SQLite, MySQL, MariaDB and PostgreSQL. Each selection ran 248 passing tests with 830 assertions. The native Windows suite skips one rich-terminal prompt test. Additional selected-engine schema checks passed on SQLite (1 test, 19 assertions), MySQL (3, 24), MariaDB (3, 24) and PostgreSQL (3, 27).
 - Docs `composer test` passed with 29 tests and 36 assertions. Updated both READMEs, generation and stub documentation, and the docs dependency lock. Browser screens for interacting with records belong to Phases 9 and 10.
+
+### Phase 8 revision — Eloquent actions and Livewire validation (November 28, 2026)
+
+- Generated actions use ordinary Eloquent mutations and explicit reviewed attributes. Schema inspection stays in the wizard. Livewire and direct action callers share one generated resource validation class. Regenerate an existing resource to adopt its validation file and updated components together.
+- Generated-component tests checked blur bindings, full-form validation, custom field messages, confirmation edits and scoped Update uniqueness. Direct calls verified guarded fields, ignored extra input and rollback with an original database exception attached. Previous action behavior tests remain in the gate.
+- On native Windows, each selected database (SQLite, MySQL, MariaDB and PostgreSQL) passed the full package Composer gate with 248 passing tests and 858 assertions. One rich-terminal test skips on Windows. Additional schema suites passed with 1/19, 3/24, 3/24 and 3/27 tests/assertions respectively. The docs Composer gate passed with 29 tests and 36 assertions. The docs asset build and Chromium Sirius field fixture passed (1 test, 19 assertions).

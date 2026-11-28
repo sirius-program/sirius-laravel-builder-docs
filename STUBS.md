@@ -25,12 +25,15 @@ Use the exact placeholders below, including the surrounding **%{** and **}%**. E
 | File | Placeholders and context |
 | --- | --- |
 | action.stub | namespace and class are PHP identifiers. parameters is the method parameter list, return_type the PHP return type, and body the handle method statements. |
+| validation.stub | namespace, class and methods define the resource’s shared Laravel rules, messages and display labels. |
 | policy.stub | namespace and class identify the missing policy. methods contains the reviewed abilities with deny-by-default implementations. |
 | livewire.stub | namespace and class identify the component. members contains its PHP members. view is the quoted PHP expression for the view name. |
 | view.stub | content is rendered Blade markup inside the root element. |
-| pest.stub | description is a quoted PHP string and body contains Pest assertions. |
+| pest.stub | namespace is the test file’s PHP namespace. Add `namespace %{namespace}%;` after the strict types declaration when upgrading older published Pest stubs. description is a quoted PHP string and body contains Pest assertions. |
 | breadcrumb.stub | name is the quoted route name, parameters extend the callback after the trail argument (including a leading comma when present), and body defines the trail. This is a PHP fragment. |
 | field.stub | namespace and component select the Sirius Blade tag. id also supplies the stable wire key. binding is the Livewire property path. label is a PHP string expression and attributes contains the control-specific Blade attributes. |
+
+For a previously published validation stub, change the literal declaration `final class ResourceValidation` to `final class %{class}%` so each resource receives its own class name.
 
 After upgrading Builder, compare each override with its counterpart in **vendor/sirius/laravel-builder/stubs** and incorporate any new placeholders. Compare before force-publishing.
 
